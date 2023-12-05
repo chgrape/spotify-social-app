@@ -15,9 +15,21 @@ class AuthController extends Controller
 
     function callback(){
         $user = Socialite::driver("spotify")->user();
-        DB::insert("insert into users(name, token) values(?,?)", [$user->name, $user->token]);
+        $ex = DB::select("SELECT users.name FROM users WHERE users.name=?",[$user->name]);
         
-        
+        if(empty($ex)){
+            DB::insert("insert into users(name, token) values(?,?)", [$user->name, $user->token]);
+        }else{
+            DB::update('UPDATE users SET users.token=? WHERE users.name=?', [$user->token, $user->name]);
+        }
+
         dd($user);
+    }
+
+    function reset(){
+        Socialite::driver('spotify')->redirect();
+        $user = Socialite::driver('spotify')->user();
+        DB::update('UPDATE users SET users.token=? WHERE users.name=?', [$user->token, $user->name]);
+        return response('OK',200);
     }
 }

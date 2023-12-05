@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::get('/get', function() {
-    $token = DB::select('select users.token from users where users.id=1');
+    $token = DB::select('select users.token from users where users.id=2');
     $res = Http::withHeaders(['Authorization' => "Bearer " . $token[0]->token])->get('https://api.spotify.com/v1/me/playlists');
-    dd($res->body());
+    return $res;
 });
+
