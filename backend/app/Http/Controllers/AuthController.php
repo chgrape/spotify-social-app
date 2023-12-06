@@ -10,7 +10,7 @@ use Laravel\Socialite\Facades\Socialite;
 class AuthController extends Controller
 {
     function redirect(){
-        return Socialite::driver("spotify")->redirect();
+        return Socialite::driver("spotify")->scopes(['user-read-recently-played'])->redirect();
     }
 
     function callback(){
@@ -26,10 +26,4 @@ class AuthController extends Controller
         dd($user);
     }
 
-    function reset(){
-        Socialite::driver('spotify')->redirect();
-        $user = Socialite::driver('spotify')->user();
-        DB::update('UPDATE users SET users.token=? WHERE users.name=?', [$user->token, $user->name]);
-        return response('OK',200);
-    }
 }
