@@ -22,7 +22,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'token',
-        'most_pop_artist'
+        'artist',
+        'genre_id'
         // 'email',
         // 'password',
     ];
