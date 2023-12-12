@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('token');
-            $table->string('most_pop_artist')->nullable();
-            $table->rememberToken();
-            $table->timestamps();
+            $table->string('most_pop_artist');
+            $table->foreign('most_pop_artist')->references('artist_id')->on('artists');
         });
     }
 
