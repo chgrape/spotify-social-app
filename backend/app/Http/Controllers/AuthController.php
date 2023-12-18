@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Artist;
 use App\Models\Genre;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -16,20 +15,26 @@ class AuthController extends Controller
         return Socialite::driver("spotify")->scopes(['user-read-recently-played', 'user-top-read'])->redirect();
     }
 
-    function callback(){
-        $user = Socialite::driver("spotify")->user();
-
-        $res = Http::withHeaders(['Authorization' => "Bearer " . $user->token])->get('https://api.spotify.com/v1/me/top/artists');
-        $artist = $res->json()["items"][0];
-
+    function getGenre($items){
         $all_genres = [];
-        foreach($res->json()["items"] as $item){
+        foreach($items as $item){
             $all_genres = array_merge($all_genres, $item["genres"]);
         }
         $all_genres = array_count_values($all_genres);
         $fav_genre = max($all_genres);
-        $fav_genre = array_keys($all_genres, $fav_genre)[0];
+        return array_keys($all_genres, $fav_genre)[0];
+    }
 
+    function callback(){
+        $user = Socialite::driver("spotify")->user();
+
+        $res = Http::withHeaders(['Authorization' => "Bearer " . $user->token])->get('https://api.spotify.com/v1/me/top/artists');
+        if(empty($res->json()["items"])){
+            return response()->json(['message'=> 'You havent listened to enough music'],Response::HTTP_OK);
+        }
+        $artist = $res->json()["items"][0];
+
+        $fav_genre = AuthController::getGenre($res->json()["items"]);
 
         if(!User::where('name', $user->name)->exists()){
             if(!Artist::where('artist_id',$artist["id"])->exists()){
