@@ -8,11 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Artist extends Model
 {
     use HasFactory;
+    public $timestamps = true;
     
-    public $timestamps = false;
+
+    public function users(){
+        return $this->belongsToMany(User::class, 'user_artist');
+    }
 
     protected $fillable = [
         'artist_id',
-        'name'
+        'name',
+        'updated_at',
+        'created_at'
+
     ];
 }

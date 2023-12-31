@@ -11,54 +11,39 @@ use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
-    function redirect(){
-        return Socialite::driver("spotify")->scopes(['user-read-recently-played', 'user-top-read'])->redirect();
+
+    protected $user_info_controller;
+
+    function __construct(UserInfoController $user_info_controller){
+        $this->user_info_controller = $user_info_controller;
     }
 
-    function getGenre($items){
-        $all_genres = [];
-        foreach($items as $item){
-            $all_genres = array_merge($all_genres, $item["genres"]);
-        }
-        $all_genres = array_count_values($all_genres);
-        $fav_genre = max($all_genres);
-        return array_keys($all_genres, $fav_genre)[0];
+    function redirect(){
+        return Socialite::driver("spotify")->scopes(['user-top-read'])->redirect();
     }
 
     function callback(){
         $user = Socialite::driver("spotify")->user();
 
-        $res = Http::withHeaders(['Authorization' => "Bearer " . $user->token])->get('https://api.spotify.com/v1/me/top/artists');
-        if(empty($res->json()["items"])){
-            return response()->json(['message'=> 'You havent listened to enough music'],Response::HTTP_OK);
-        }
-        $artist = $res->json()["items"][0];
+        $ar = $this->user_info_controller->get_artists();
 
-        $fav_genre = AuthController::getGenre($res->json()["items"]);
+        $artists = array_slice($ar,0,5,true);
+        $fav_genres = $this->user_info_controller->get_genres($ar);
+
+        $artist_objs = $this->user_info_controller->create_artists($artists);
+        $genre_objs = $this->user_info_controller->create_genres($fav_genres);
 
         if(!User::where('name', $user->name)->exists()){
-            if(!Artist::where('artist_id',$artist["id"])->exists()){
-                Artist::create([
-                    'artist_id' => $artist["id"],
-                    'name' => $artist["name"],
-                ]);
-            }
-            if(!Genre::where('name', $fav_genre)->exists()){
-                Genre::create([ 
-                    'name' => $fav_genre
-                ]);
-            }
-
             User::create([
                 'name' => $user->name,
                 'token' => $user->token,
-                'artist' => $artist['id'],
-                'genre_id' => Genre::where('name', $fav_genre)->pluck('id')[0]
             ]);
-
         }else{
             User::where('name', $user->name)->update(['token'=> $user->token]);
         }
+
+        User::where('name', $user->name)->first()->artists()->sync($artist_objs);
+        User::where('name', $user->name)->first()->genres()->sync($genre_objs);
 
         dd($user);
     }

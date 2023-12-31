@@ -12,7 +12,15 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    public $timestamps = false;
+    public $timestamps = true;
+
+    public function artists(){
+        return $this->belongsToMany(Artist::class, 'user_artist');
+    }
+
+    public function genres(){
+        return $this->belongsToMany(Genre::class, 'user_genre');
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -22,10 +30,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'token',
-        'artist',
-        'genre_id'
-        // 'email',
-        // 'password',
+        'updated_at',
+        'created_at'
     ];
 
 }

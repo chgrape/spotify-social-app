@@ -53,7 +53,8 @@ class UserController extends Controller
 
     public function showArtist(int $id)
     {
-        return User::leftJoin("artists","users.artist","=","artists.artist_id")
+        return User::leftJoin("user_artist","user_artist.user_id","=","users.id")
+        ->leftJoin("artists", "user_artist.artist_id", "=", "artists.artist_id")
         ->where('users.id', '=', $id)
         ->select('artists.name as artist_name')
         ->get();
@@ -61,7 +62,8 @@ class UserController extends Controller
 
     public function showGenre(int $id)
     {
-        return User::leftJoin("genres","users.genre_id","=","genres.id")
+        return User::leftJoin("user_genre","user_genre.user_id","=","users.id")
+        ->leftJoin("genres", "user_genre.genre_id", "=", "genres.id")
         ->where('users.id', '=', $id)
         ->select('genres.name as genre_name')
         ->get();

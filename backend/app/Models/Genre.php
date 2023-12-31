@@ -8,9 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Genre extends Model
 {
     use HasFactory;
-    public $timestamps = false;
+
+    public function users(){
+        return $this->belongsToMany(User::class, 'user_genre');
+    }
+
+    public $timestamps = true;
+
 
     protected $fillable = [
-        'name'
+        'name',
+        'updated_at',
+        'created_at'
     ];
 }

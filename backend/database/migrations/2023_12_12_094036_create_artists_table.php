@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('artist_id');
             $table->index('artist_id');
             $table->string('name');
+            $table->timestamps();
         });
     }
 

@@ -11,7 +11,7 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($user_id)
+    public function index()
     {
         return Post::all();
     }

@@ -15,10 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('token');
-            $table->string('artist');
-            $table->foreign('artist')->references('artist_id')->on('artists');
-            $table->unsignedBigInteger('genre_id');
-            $table->foreign('genre_id')->references('id')->on('genres');
+            $table->timestamps();
         });
     }
 
