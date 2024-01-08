@@ -31,8 +31,8 @@ class RefreshToken implements ShouldQueue
      */
     public function handle(): void
     {   
-        $tokens = $this->user_info_controller->get_new_token($this->user->refresh_token);
-        dd($tokens);
-        $this->user->update(['token' => $tokens[0], 'refresh_token' => $tokens[1], 'last_refresh' => now()]);
+        $token = $this->user_info_controller->get_new_token($this->user->refresh_token);
+        
+        $this->user->update(['token' => $token, 'last_refresh' => now()]);
     }
 }

@@ -67,7 +67,6 @@ class UserInfoController extends Controller
 
     function get_new_token($refresh_token){
         $response = Http::asForm()->withHeaders(['Authorization' => 'Basic ' . base64_encode(env('SPOTIFY_CLIENT_ID') . ":" . env('SPOTIFY_SECRET')),])->post('https://accounts.spotify.com/api/token', ['grant_type' => 'refresh_token', 'refresh_token'=>$refresh_token]);
-        Log::info($response->json());
-        return [$response->json()->token, $response->json()->refreshToken];
+        return $response->json()["access_token"];
     }
 }
