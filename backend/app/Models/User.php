@@ -31,7 +31,10 @@ class User extends Authenticatable
         'name',
         'token',
         'updated_at',
-        'created_at'
+        'created_at',
+        'last_info_update',
+        'last_refresh',
+        'refresh_token'
     ];
 
 }

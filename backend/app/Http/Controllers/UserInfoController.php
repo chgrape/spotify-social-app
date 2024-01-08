@@ -7,12 +7,12 @@ use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
 class UserInfoController extends Controller
 {
-    function get_artists(){
-        $user = Socialite::driver("spotify")->user();
+    function get_artists($user){
 
         $res = Http::withHeaders(['Authorization' => "Bearer " . $user->token])->get('https://api.spotify.com/v1/me/top/artists');
         if(empty($res->json()["items"])){
@@ -63,5 +63,11 @@ class UserInfoController extends Controller
         }
 
         return $genre_objs;
+    }
+
+    function get_new_token($refresh_token){
+        $response = Http::asForm()->withHeaders(['Authorization' => 'Basic ' . base64_encode(env('SPOTIFY_CLIENT_ID') . ":" . env('SPOTIFY_SECRET')),])->post('https://accounts.spotify.com/api/token', ['grant_type' => 'refresh_token', 'refresh_token'=>$refresh_token]);
+        Log::info($response->json());
+        return [$response->json()->token, $response->json()->refreshToken];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Http\Controllers\UserInfoController;
+use App\Jobs\RefreshToken;
 use App\Jobs\UpdateUserInfoDaily;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -14,8 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $user_info_controller = new UserInfoController();
-        $schedule->job(new UpdateUserInfoDaily($user_info_controller))->everyThirtySeconds();
+        $schedule->command('check:update')->hourly();
+        
     }
 
     /**

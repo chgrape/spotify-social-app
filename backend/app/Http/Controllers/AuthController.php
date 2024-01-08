@@ -25,7 +25,7 @@ class AuthController extends Controller
     function callback(){
         $user = Socialite::driver("spotify")->user();
 
-        $ar = $this->user_info_controller->get_artists();
+        $ar = $this->user_info_controller->get_artists($user);
 
         $artists = array_slice($ar,0,5,true);
         $fav_genres = $this->user_info_controller->get_genres($ar);
@@ -37,6 +37,9 @@ class AuthController extends Controller
             User::create([
                 'name' => $user->name,
                 'token' => $user->token,
+                'last_info_update' => now(),
+                'last_refresh' => now(),
+                'refresh_token' => $user->refreshToken
             ]);
         }else{
             User::where('name', $user->name)->update(['token'=> $user->token]);

@@ -18,13 +18,15 @@ class UpdateUserInfoDaily implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $user_info_controller;
+    protected $user;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(UserInfoController $user_info_controller)
+    public function __construct(User $user)
     {
-        $this->user_info_controller = $user_info_controller;
+        $this->user_info_controller = new UserInfoController();
+        $this->user = $user;
     }
 
     /**
@@ -32,15 +34,16 @@ class UpdateUserInfoDaily implements ShouldQueue
      */
     public function handle(): void
     {
-        $user = Socialite::driver('spotify')->user();
-
-        $artists = $this->user_info_controller->get_artists();
+        $artists = $this->user_info_controller->get_artists($this->user);
         $genres = $this->user_info_controller->get_genres($artists);
 
         $artist_objs = $this->user_info_controller->create_artists(array_slice($artists, 0, 5, true));
         $genre_objs = $this->user_info_controller->create_genres($genres);
 
-        User::where('name', $user->name)->first()->artists()->sync($artist_objs);
-        User::where('name', $user->name)->first()->genres()->sync($genre_objs);
+        $this->user->artists()->sync($artist_objs);
+        $this->user->genres()->sync($genre_objs);
+
+        $this->user->update(['last_info_update' => now()]);
+        Log::info('Updated timestamp' . $this->user->last_info_update);
     }
 }
