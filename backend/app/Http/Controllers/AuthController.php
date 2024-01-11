@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -25,6 +26,7 @@ class AuthController extends Controller
     function callback(){
         $user = Socialite::driver("spotify")->user();
 
+
         $ar = $this->user_info_controller->get_artists($user);
 
         $artists = array_slice($ar,0,5,true);
@@ -41,9 +43,9 @@ class AuthController extends Controller
                 'last_refresh' => now(),
                 'refresh_token' => $user->refreshToken
             ]);
-        }else{
-            User::where('name', $user->name)->update(['token'=> $user->token]);
         }
+
+        User::where('name', $user->name)->first()->createToken('sanc_token')->plainTextToken;
 
         User::where('name', $user->name)->first()->artists()->sync($artist_objs);
         User::where('name', $user->name)->first()->genres()->sync($genre_objs);
