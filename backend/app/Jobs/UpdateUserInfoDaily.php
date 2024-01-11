@@ -44,6 +44,5 @@ class UpdateUserInfoDaily implements ShouldQueue
         $this->user->genres()->sync($genre_objs);
 
         $this->user->update(['last_info_update' => now()]);
-        Log::info('Updated timestamp' . $this->user->last_info_update);
     }
 }
