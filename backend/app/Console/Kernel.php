@@ -15,8 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('check:update')->hourly();
-        
+        $schedule->command('check:update')->everySixHours();
+        $schedule->command('sanctum:prune-expired')->daily();
     }
 
     /**

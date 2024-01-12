@@ -15,16 +15,10 @@ use App\Http\Controllers\UserController;
 |
 */
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/users', [UserController::class, 'index']);
-    Route::get('/users/{id}', [UserController::class, 'show']);
-    Route::post('/users', [UserController::class, 'store']);
-    Route::put('/users/{id}', [UserController::class, 'update']);
-    Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    Route::get('/user/artist', [UserController::class, 'showArtist']);
+    Route::get('/user/genre', [UserController::class, 'showGenre']);
 
-    Route::get('/users/{id}/artist', [UserController::class, 'showArtist']);
-    Route::get('/users/{id}/genre', [UserController::class, 'showGenre']);
-
-    Route::get('/posts/{id}/all', [PostController::class, 'index']);
+    Route::get('/posts', [PostController::class, 'index']);
     Route::get('/posts/{id}', [PostController::class, 'show']);
     Route::post('/posts', [PostController::class, 'store']);
     Route::put('/posts/{id}', [PostController::class, 'update']);

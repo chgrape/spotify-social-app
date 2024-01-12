@@ -51,20 +51,20 @@ class UserController extends Controller
         return response()->json(["status"=> "success"], Response::HTTP_OK);
     }
 
-    public function showArtist(int $id)
+    public function showArtist()
     {
         return User::leftJoin("user_artist","user_artist.user_id","=","users.id")
         ->leftJoin("artists", "user_artist.artist_id", "=", "artists.artist_id")
-        ->where('users.id', '=', $id)
+        ->where('users.id', '=', auth()->user()->id)
         ->select('artists.name as artist_name')
         ->get();
     }
 
-    public function showGenre(int $id)
+    public function showGenre()
     {
         return User::leftJoin("user_genre","user_genre.user_id","=","users.id")
         ->leftJoin("genres", "user_genre.genre_id", "=", "genres.id")
-        ->where('users.id', '=', $id)
+        ->where('users.id', '=', auth()->user()->id)
         ->select('genres.name as genre_name')
         ->get();
     }

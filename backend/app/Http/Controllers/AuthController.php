@@ -26,7 +26,6 @@ class AuthController extends Controller
     function callback(){
         $user = Socialite::driver("spotify")->user();
 
-
         $ar = $this->user_info_controller->get_artists($user);
 
         $artists = array_slice($ar,0,5,true);
@@ -45,12 +44,14 @@ class AuthController extends Controller
             ]);
         }
 
-        User::where('name', $user->name)->first()->createToken('sanc_token')->plainTextToken;
-
+        $tkn = User::where('name', $user->name)->first()->createToken('sanc_token')->plainTextToken;
+        
         User::where('name', $user->name)->first()->artists()->sync($artist_objs);
         User::where('name', $user->name)->first()->genres()->sync($genre_objs);
 
-        dd($user);
+        return response()->json([
+            'token' => $tkn
+        ]);
     }
 
 }

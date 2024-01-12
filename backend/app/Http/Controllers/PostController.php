@@ -8,12 +8,20 @@ use Illuminate\Http\Response;
 
 class PostController extends Controller
 {
+
+    private function get_req_user(Request $request){
+        return array_merge($request->all(), ['user_id' => auth()->user()->id]);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Post::all();
+        
+        return Post::leftJoin('users', 'posts.user_id', '=', 'users.id')
+        ->where('users.id', '=', auth()->user()->id)
+        ->select('posts.*')
+        ->get();
     }
 
     /**
@@ -21,7 +29,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        Post::create($request->all());
+        Post::create(PostController::get_req_user($request));
         return response()->json(["message"=> "Created successfully"],Response::HTTP_CREATED);
     }
 
@@ -30,7 +38,13 @@ class PostController extends Controller
      */
     public function show(int $id)
     {
-        return Post::find($id)->first();
+        if($id > count(PostController::index()) || $id <= 0){
+            return response()->json(["message" => "Post doesn't exist"], Response::HTTP_BAD_REQUEST);
+        }
+        return Post::leftJoin('users', 'posts.user_id', '=', 'users.id')
+        ->where('users.id', '=', auth()->user()->id)
+        ->select('posts.*')
+        ->get()[$id-1];
     }
 
     /**
@@ -38,7 +52,11 @@ class PostController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        Post::find($id)->update($request->all());
+        Post::leftJoin('users', 'posts.user_id', '=', 'users.id')
+        ->where('users.id', '=', auth()->user()->id)
+        ->select('posts.*')
+        ->get()[$id-1]
+        ->update(PostController::get_req_user($request));
         return response()->json(["message"=> "Updated successfully"],Response::HTTP_CREATED);
     }
 
@@ -47,7 +65,11 @@ class PostController extends Controller
      */
     public function destroy(int $id)
     {
-        Post::find($id)->delete();
+        Post::leftJoin('users', 'posts.user_id', '=', 'users.id')
+        ->where('users.id', '=', auth()->user()->id)
+        ->select('posts.*')
+        ->get()[$id-1]
+        ->delete();
         return response()->json(["message"=> "Deleted successfully"],Response::HTTP_CREATED);
     }
 }
