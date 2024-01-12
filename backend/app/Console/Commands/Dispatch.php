@@ -27,11 +27,10 @@ class Dispatch extends Command
      */
     public function handle()
     {
-        // $job = $this->argument('job');
-        // $jobClass = 'App\Jobs\\' . Str::studly($job);
+        $job = $this->argument('job');
+        $jobClass = 'App\Jobs\\' . Str::studly($job);
 
-        // dispatch(new $jobClass());
+        dispatch(new $jobClass());
 
-        dispatch(new UpdateUserInfoDaily(User::where('name', 'chgrape')->first()));
     }
 }
