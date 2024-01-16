@@ -3,6 +3,42 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Objectivity';
-  src: url("assets/behance-637fc8bc34000.ttf") format("truetype");
+  font-family: "Objectivity";
+  src: url("assets/Objectivity-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Objectivity";
+  src: url("assets/Objectivity-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Objectivity";
+  src: url("assets/Objectivity-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Objectivity";
+  src: url("assets/Objectivity-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Objectivity";
+  src: url("assets/Objectivity-Thin.otf") format("opentype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+body {
+  @apply bg-neutral-800;
+  @apply text-white;
+  @apply font-primary;
 }
