@@ -14,7 +14,7 @@ function Create() {
             onClick={() => setIsOpen(!isOpen)}
             className={`w-72 flex py-2 px-5 bg-neutral-700 h-10 rounded-lg ${
               isOpen ? "border ring-2 ring-white ring-opacity-10 " : "border"
-            } border-neutral-600`}
+            } border-neutral-600 drop-shadow-lg`}
           >
             <p>{group}</p>
           </button>
@@ -22,7 +22,7 @@ function Create() {
             className={
               !isOpen
                 ? "hidden"
-                : "absolute mt-2 bg-neutral-700 rounded-lg w-72 border border-neutral-600 ring-2 ring-white ring-opacity-10"
+                : "z-10 absolute mt-2 bg-neutral-700 rounded-lg w-72 border border-neutral-600 ring-2 ring-white ring-opacity-10"
             }
           >
             <button
@@ -56,7 +56,7 @@ function Create() {
         </section>
         <form
           ref={formRef}
-          className="h-[30rem] w-full bg-neutral-700 rounded-lg p-5"
+          className="drop-shadow-lg h-[30rem] w-full bg-neutral-700 rounded-lg p-5"
         >
           <input
             className="bg-neutral-800 mb-5 w-full h-10 py-2 px-5 rounded-lg"
