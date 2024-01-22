@@ -2,34 +2,56 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artist;
+use App\Models\Genre;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
+
+    protected $user_info_controller;
+
+    function __construct(UserInfoController $user_info_controller){
+        $this->user_info_controller = $user_info_controller;
+    }
+
     function redirect(){
-        return Socialite::driver("spotify")->redirect();
+        return Socialite::driver("spotify")->scopes(['user-top-read'])->redirect();
     }
 
     function callback(){
         $user = Socialite::driver("spotify")->user();
-        $ex = DB::select("SELECT users.name FROM users WHERE users.name=?",[$user->name]);
-        
-        if(empty($ex)){
-            DB::insert("insert into users(name, token) values(?,?)", [$user->name, $user->token]);
-        }else{
-            DB::update('UPDATE users SET users.token=? WHERE users.name=?', [$user->token, $user->name]);
+
+        $ar = $this->user_info_controller->get_artists($user);
+
+        $artists = array_slice($ar,0,5,true);
+        $fav_genres = $this->user_info_controller->get_genres($ar);
+
+        $artist_objs = $this->user_info_controller->create_artists($artists);
+        $genre_objs = $this->user_info_controller->create_genres($fav_genres);
+
+        if(!User::where('name', $user->name)->exists()){
+            User::create([
+                'name' => $user->name,
+                'token' => $user->token,
+                'last_info_update' => now(),
+                'last_refresh' => now(),
+                'refresh_token' => $user->refreshToken
+            ]);
         }
 
-        dd($user);
+        $tkn = User::where('name', $user->name)->first()->createToken('sanc_token')->plainTextToken;
+        
+        User::where('name', $user->name)->first()->artists()->sync($artist_objs);
+        User::where('name', $user->name)->first()->genres()->sync($genre_objs);
+
+        return response()->json([
+            'token' => $tkn
+        ]);
     }
 
-    function reset(){
-        Socialite::driver('spotify')->redirect();
-        $user = Socialite::driver('spotify')->user();
-        DB::update('UPDATE users SET users.token=? WHERE users.name=?', [$user->token, $user->name]);
-        return response('OK',200);
-    }
 }

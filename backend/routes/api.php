@@ -1,11 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,14 +14,13 @@ use Laravel\Socialite\Facades\Socialite;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user/artist', [UserController::class, 'showArtist']);
+    Route::get('/user/genre', [UserController::class, 'showGenre']);
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
+    Route::get('/posts', [PostController::class, 'index']);
+    Route::get('/posts/{id}', [PostController::class, 'show']);
+    Route::post('/posts', [PostController::class, 'store']);
+    Route::put('/posts/{id}', [PostController::class, 'update']);
+    Route::delete('/posts/{id}', [PostController::class, 'destroy']);
 });
-
-Route::get('/get', function() {
-    $token = DB::select('select users.token from users where users.id=2');
-    $res = Http::withHeaders(['Authorization' => "Bearer " . $token[0]->token])->get('https://api.spotify.com/v1/me/playlists');
-    return $res;
-});
-

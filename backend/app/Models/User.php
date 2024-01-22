@@ -12,6 +12,16 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public $timestamps = true;
+
+    public function artists(){
+        return $this->belongsToMany(Artist::class, 'user_artist');
+    }
+
+    public function genres(){
+        return $this->belongsToMany(Genre::class, 'user_genre');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -19,28 +29,12 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'token'
-        // 'email',
-        // 'password',
+        'token',
+        'updated_at',
+        'created_at',
+        'last_info_update',
+        'last_refresh',
+        'refresh_token'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
 }
