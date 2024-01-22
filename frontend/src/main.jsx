@@ -3,17 +3,31 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./routes/Login.jsx";
 import Navbar from "./components/Navbar.jsx";
+import Home from "./routes/Home.jsx";
+import Create from "./routes/Create.jsx";
 
 const router = createBrowserRouter([
   {
-    path: "/login",
-    element: <Login />,
+    element: <Navbar />,
+    children: [
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/create",
+        element: <Create />,
+      },
+    ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Navbar />
     <RouterProvider router={router} />
   </React.StrictMode>
 );
