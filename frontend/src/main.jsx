@@ -5,6 +5,7 @@ import Login from "./routes/Login.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Home from "./routes/Home.jsx";
 import Create from "./routes/Create.jsx";
+import Profile from "./routes/Profile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
         path: "/create",
         element: <Create />,
       },
+      {
+        path: "/profile",
+        element: <Profile />
+      }
     ],
   },
 ]);

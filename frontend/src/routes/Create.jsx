@@ -14,7 +14,7 @@ function Create() {
             onClick={() => setIsOpen(!isOpen)}
             className={`w-72 flex py-2 px-5 bg-neutral-700 h-10 rounded-lg ${
               isOpen ? "border ring-2 ring-white ring-opacity-10 " : "border"
-            } border-neutral-600 drop-shadow-lg`}
+            } border-neutral-600 drop-shadow-lg hover:bg-neutral-600`}
           >
             <p>{group}</p>
           </button>
@@ -62,10 +62,10 @@ function Create() {
             className="bg-neutral-800 mb-5 w-full h-10 py-2 px-5 rounded-lg"
             placeholder="Title"
           />
-          <input
+          <textarea
             className="bg-neutral-800 mb-5 w-full h-[calc(100%-10rem)] py-2 px-5 rounded-lg"
             placeholder="Description"
-          ></input>
+          />
           <div className="w-full flex flex-row justify-end mt-4 border-t border-neutral-400 pt-4">
             <button
               onClick={(e) => {

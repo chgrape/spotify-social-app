@@ -3,7 +3,6 @@ import find from "../assets/icons8-search.svg";
 import create from "../assets/edit.svg";
 import profile from "../assets/user-circle.svg";
 import group from "../assets/users.svg";
-import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -16,15 +15,14 @@ function Home() {
         title="Find"
         description="Find people with similair tastes in music"
       />
-      <Link to="/create">
       <Card
         icon={create}
+        path="/create"
         title="Post"
-        description="Create a post to a chosen group"
-      ></Card>
-      </Link>
+        description="Create a post to a chosen group" />
       <Card
         icon={profile}
+        path="/profile"
         title="Profile"
         description="View posts, groups, and stats"
       />
