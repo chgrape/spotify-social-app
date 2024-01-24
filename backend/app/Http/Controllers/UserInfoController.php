@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Artist;
 use App\Models\Genre;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
-use Laravel\Socialite\Facades\Socialite;
 
 class UserInfoController extends Controller
 {
