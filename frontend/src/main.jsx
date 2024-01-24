@@ -7,6 +7,8 @@ import Home from "./routes/Home.jsx";
 import Create from "./routes/Create.jsx";
 import Profile from "./routes/Profile.jsx";
 import Authorization from "./routes/Authorization.jsx";
+import { Cookies } from "react-cookie";
+import axios from "axios";
 
 const router = createBrowserRouter([
   {
@@ -26,12 +28,23 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <Profile />
+        element: <Profile />,
+        loader: async () => {
+          const url = "http://localhost:8000/api/posts";
+          const cookies = new Cookies();
+          const res = await axios.get(url, {
+            headers: {
+              Authorization: "Bearer " + cookies.get("token"),
+              Accept: "*/*",
+            },
+          });
+          return res.data;
+        },
       },
       {
         path: "/authorization",
-        element: <Authorization />
-      }
+        element: <Authorization />,
+      },
     ],
   },
 ]);
