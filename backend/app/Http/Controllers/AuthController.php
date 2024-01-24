@@ -19,7 +19,7 @@ class AuthController extends Controller
     }
 
     function callback(){
-        $user = Socialite::driver("spotify")->user();
+        $user = Socialite::driver("spotify")->stateless()->user();
 
         $ar = $this->user_info_controller->get_artists($user);
 
@@ -44,9 +44,7 @@ class AuthController extends Controller
         User::where('name', $user->name)->first()->artists()->sync($artist_objs);
         User::where('name', $user->name)->first()->genres()->sync($genre_objs);
 
-        return response()->json([
-            'token' => $tkn
-        ]);
+        return redirect('http://localhost:5173/authorization?token=' . $tkn);
     }
 
 }

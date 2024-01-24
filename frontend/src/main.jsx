@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar.jsx";
 import Home from "./routes/Home.jsx";
 import Create from "./routes/Create.jsx";
 import Profile from "./routes/Profile.jsx";
+import Authorization from "./routes/Authorization.jsx";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />
+      },
+      {
+        path: "/authorization",
+        element: <Authorization />
       }
     ],
   },

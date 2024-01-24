@@ -2,6 +2,8 @@ import LoginButton from "../components/LoginButton";
 import "../index.css";
 
 function Login() {
+  
+
   return (
     <div className="flex flex-col justify-center w-full items-center py-32">
       <h1 className="text-3xl md:text-6xl xl:text-8xl font-primary font-bold max-w-6xl text-center leading-relaxed m-4">
