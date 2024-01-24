@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily:{
-        primary: "Objectivity"
+        primary: "DM Sans"
       }
     },
   },
