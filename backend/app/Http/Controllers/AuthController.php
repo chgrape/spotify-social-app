@@ -2,13 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Artist;
-use App\Models\Genre;
 use App\Models\User;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {

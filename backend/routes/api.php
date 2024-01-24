@@ -15,8 +15,7 @@ use App\Http\Controllers\UserController;
 |
 */
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user/artist', [UserController::class, 'showArtist']);
-    Route::get('/user/genre', [UserController::class, 'showGenre']);
+    Route::get('/user/info', [UserController::class, 'showUserInfo']);
 
     Route::get('/posts', [PostController::class, 'index']);
     Route::get('/posts/{id}', [PostController::class, 'show']);
