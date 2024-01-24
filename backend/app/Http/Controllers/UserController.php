@@ -65,6 +65,6 @@ class UserController extends Controller
         ->select('genres.name as genre')
         ->pluck('genre')->all();
 
-        return ['artists' => $artists, 'genres' => $genres];
+        return ['username'=> auth()->user()->name,'artists' => $artists, 'genres' => $genres];
     }
 }
