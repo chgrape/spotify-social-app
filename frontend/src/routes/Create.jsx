@@ -1,9 +1,33 @@
 import { useRef, useState } from "react";
+import axios from 'axios'
+import { Cookies } from "react-cookie";
+import { redirect } from "react-router-dom";
 
 function Create() {
+  const url = "http://localhost:8000/api/posts"
+
   const formRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [group, setGroup] = useState("Choose Group");
+
+  const [title, setTitle] = useState("")
+  const [desc, setDesc] = useState("")
+
+  const cookies = new Cookies()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const data = axios.post(url, {
+      title: title,
+      content: desc
+    }, {
+      headers:{
+        'Authorization': 'Bearer ' + cookies.get('token')
+      }
+    })
+
+    return redirect("/")
+  }
 
   return (
     <div style={{ maxWidth: "820px" }} className="flex flex-col mx-auto pt-32">
@@ -57,34 +81,38 @@ function Create() {
         <form
           ref={formRef}
           className="drop-shadow-lg h-[30rem] w-full bg-neutral-700 rounded-lg p-5"
+          onSubmit={handleSubmit}
         >
           <input
             className="bg-neutral-800 mb-5 w-full h-10 py-2 px-5 rounded-lg"
             placeholder="Title"
+            value={title}
+            onChange={(e)=>{setTitle(e.target.value)}}
           />
           <textarea
             className="bg-neutral-800 mb-5 w-full h-[calc(100%-10rem)] py-2 px-5 rounded-lg"
             placeholder="Description"
+            value={desc}
+            onChange={(e)=>{setDesc(e.target.value)}}
           />
           <div className="w-full flex flex-row justify-end mt-4 border-t border-neutral-400 pt-4">
             <button
               onClick={(e) => {
                 e.preventDefault();
-                if (formRef.current) {
-                  formRef.current.reset();
-                }
+                setTitle("")
+                setDesc("")
               }}
               className="py-2 px-5 rounded-full border-neutral-400 border mr-5 bg-neutral-800 font-bold opacity-85 hover:opacity-100"
             >
               Reset
             </button>
             <button
-              onClick={(e) => {
-                e.preventDefault();
-              }}
+              type="submit"
+              
               className="py-2 px-5 rounded-full bg-neutral-100 text-neutral-900 font-bold opacity-85 hover:opacity-100"
+              
             >
-              Post
+             Post
             </button>
           </div>
         </form>

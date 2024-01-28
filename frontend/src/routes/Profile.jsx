@@ -1,21 +1,28 @@
 import React from "react";
 import Stat from "../components/Stat";
+import PostCard from "../components/PostCard";
+import { useLoaderData } from "react-router-dom";
 
 function Profile() {
+  const posts = useLoaderData()
+  
   return (
-    <div className=" pt-32 flex justify-center">
+    <div className=" pt-32 flex justify-center flex-col ">
       <header className="mx-auto w-[52rem] justify-center flex">
         <div className="w-[30rem]">
-          <h1 className="text-5xl font-semibold my-3">Username</h1>
+          <h1 className="text-5xl font-semibold my-3">{sessionStorage.getItem('username')}</h1>
           <p>link to profile</p>
           <aside className="my-5 flex flex-row ">
-            <Stat statName="Likes" amount="3" />
+            <Stat statName="Likes" amount={posts.reduce((total, post) => total + post.like_count, 0)} />
             <Stat statName="Groups" amount="2" />
-            <Stat statName="Posts" amount="1" />
+            <Stat statName="Posts" amount={posts.length} />
           </aside>
         </div>
-        <div className="h-36 w-36 rounded-full bg-neutral-300" />
+        <div className="h-36 w-36 rounded-full bg-neutral-300 max-md:hidden" />
       </header>
+      {
+        posts.map((post) => <PostCard key={post.id} title={post.title} desc={post.content} likes={post.like_count} />)
+      }
     </div>
   );
 }

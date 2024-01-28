@@ -51,21 +51,20 @@ class UserController extends Controller
         return response()->json(["status"=> "success"], Response::HTTP_OK);
     }
 
-    public function showArtist()
+    public function showUserInfo()
     {
-        return User::leftJoin("user_artist","user_artist.user_id","=","users.id")
+        $artists =User::leftJoin("user_artist","user_artist.user_id","=","users.id")
         ->leftJoin("artists", "user_artist.artist_id", "=", "artists.artist_id")
         ->where('users.id', '=', auth()->user()->id)
-        ->select('artists.name as artist_name')
-        ->get();
-    }
+        ->select('artists.name as artist')
+        ->pluck('artist')->all();
 
-    public function showGenre()
-    {
-        return User::leftJoin("user_genre","user_genre.user_id","=","users.id")
+        $genres = User::leftJoin("user_genre","user_genre.user_id","=","users.id")
         ->leftJoin("genres", "user_genre.genre_id", "=", "genres.id")
         ->where('users.id', '=', auth()->user()->id)
-        ->select('genres.name as genre_name')
-        ->get();
+        ->select('genres.name as genre')
+        ->pluck('genre')->all();
+
+        return ['username'=> auth()->user()->name,'artists' => $artists, 'genres' => $genres];
     }
 }

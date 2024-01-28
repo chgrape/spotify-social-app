@@ -22,7 +22,7 @@ function Navbar() {
             src={about}
             className="mx-5 transition-opacity duration-150 ease-in-out hover:opacity-100 opacity-70 h-6 w-6"
           />
-          <ProfilePill />
+          {sessionStorage.getItem('username') && <ProfilePill />}
         </div>
       </nav>
       <main>

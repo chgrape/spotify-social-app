@@ -2,9 +2,6 @@
 
 namespace App\Console;
 
-use App\Http\Controllers\UserInfoController;
-use App\Jobs\RefreshToken;
-use App\Jobs\UpdateUserInfoDaily;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
