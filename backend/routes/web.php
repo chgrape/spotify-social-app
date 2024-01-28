@@ -14,11 +14,5 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('/', function () {
-    return ['Laravel' => app()->version()];
-});
-
-require __DIR__.'/auth.php';
-
 Route::get('/spotify/redirect', [AuthController::class,'redirect']);
 Route::get('/spotify/callback', [AuthController::class,'callback']);

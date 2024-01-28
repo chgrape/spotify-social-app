@@ -20,6 +20,5 @@ class Artist extends Model
         'name',
         'updated_at',
         'created_at'
-
     ];
 }
