@@ -15,7 +15,6 @@ class UserInfoController extends Controller
         if(empty($res->json()["items"])){
             return response()->json(['message'=> 'You havent listened to enough music'],Response::HTTP_OK);
         }
-
         return $res->json()["items"];
     }
 
@@ -28,7 +27,7 @@ class UserInfoController extends Controller
         uasort($all_genres, function($a, $b){
             return $b - $a;
         });
-        return array_keys(array_slice($all_genres,0,5,true));
+        return array_keys(array_slice($all_genres,0,20,true));
     }
 
     function create_artists($artists){
@@ -41,7 +40,7 @@ class UserInfoController extends Controller
                     'name' => $artist["name"],
                 ]);
             }
-            array_push($artist_objs,$artist["id"]);
+            array_push($artist_objs,Artist::where('artist_id',$artist["id"])->first()->id);
         }
 
         return $artist_objs;

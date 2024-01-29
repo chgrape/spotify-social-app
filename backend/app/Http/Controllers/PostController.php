@@ -20,7 +20,7 @@ class PostController extends Controller
         
         return Post::leftJoin('users', 'posts.user_id', '=', 'users.id')
         ->where('users.id', '=', auth()->user()->id)
-        ->select('posts.*')
+        ->select('posts.*', 'users.name', 'users.avatar')
         ->get();
     }
 
@@ -43,7 +43,7 @@ class PostController extends Controller
         }
         return Post::leftJoin('users', 'posts.user_id', '=', 'users.id')
         ->where('users.id', '=', auth()->user()->id)
-        ->select('posts.*')
+        ->select('posts.*', 'users.name as username', 'users.avatar as avatar')
         ->get()[$id-1];
     }
 
@@ -54,7 +54,6 @@ class PostController extends Controller
     {
         Post::leftJoin('users', 'posts.user_id', '=', 'users.id')
         ->where('users.id', '=', auth()->user()->id)
-        ->select('posts.*')
         ->get()[$id-1]
         ->update(PostController::get_req_user($request));
         return response()->json(["message"=> "Updated successfully"],Response::HTTP_CREATED);
@@ -67,7 +66,6 @@ class PostController extends Controller
     {
         Post::leftJoin('users', 'posts.user_id', '=', 'users.id')
         ->where('users.id', '=', auth()->user()->id)
-        ->select('posts.*')
         ->get()[$id-1]
         ->delete();
         return response()->json(["message"=> "Deleted successfully"],Response::HTTP_CREATED);

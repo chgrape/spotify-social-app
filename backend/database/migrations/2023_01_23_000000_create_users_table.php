@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('token');
+            $table->string('avatar')->nullable();
             $table->string('refresh_token');
             $table->datetime('last_info_update');
             $table->datetime('last_refresh');

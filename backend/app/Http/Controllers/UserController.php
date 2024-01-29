@@ -54,7 +54,7 @@ class UserController extends Controller
     public function showUserInfo()
     {
         $artists =User::leftJoin("user_artist","user_artist.user_id","=","users.id")
-        ->leftJoin("artists", "user_artist.artist_id", "=", "artists.artist_id")
+        ->leftJoin("artists", "user_artist.artist_id", "=", "artists.id")
         ->where('users.id', '=', auth()->user()->id)
         ->select('artists.name as artist')
         ->pluck('artist')->all();
@@ -65,6 +65,6 @@ class UserController extends Controller
         ->select('genres.name as genre')
         ->pluck('genre')->all();
 
-        return ['username'=> auth()->user()->name,'artists' => $artists, 'genres' => $genres];
+        return ['avatar' => auth()->user()->avatar, 'username'=> auth()->user()->name,'artists' => $artists, 'genres' => $genres];
     }
 }

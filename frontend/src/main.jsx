@@ -9,6 +9,10 @@ import Profile from "./routes/Profile.jsx";
 import Authorization from "./routes/Authorization.jsx";
 import { Cookies } from "react-cookie";
 import axios from "axios";
+import Post from "./routes/Post.jsx";
+
+const url = "http://localhost:8000/api";
+const cookies = new Cookies();
 
 const router = createBrowserRouter([
   {
@@ -30,9 +34,7 @@ const router = createBrowserRouter([
         path: "/profile",
         element: <Profile />,
         loader: async () => {
-          const url = "http://localhost:8000/api/posts";
-          const cookies = new Cookies();
-          const res = await axios.get(url, {
+          const res = await axios.get(url + "/posts", {
             headers: {
               Authorization: "Bearer " + cookies.get("token"),
               Accept: "*/*",
@@ -40,6 +42,19 @@ const router = createBrowserRouter([
           });
           return res.data;
         },
+      },
+      {
+        path: "post/:id",
+        element: <Post />,
+        loader: async ({params}) => {
+          const res = await axios.get(url + "/posts/" + params.id, {
+            headers: {
+              Authorization: "Bearer " + cookies.get("token"),
+              Accept: "*/*",
+            },
+          });
+          return res.data;
+        }
       },
       {
         path: "/authorization",

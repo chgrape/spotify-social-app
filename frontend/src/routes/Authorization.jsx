@@ -27,8 +27,9 @@ function Authorization() {
             'Authorization': 'Bearer ' + tkn
           }
         })
-  
+        
         sessionStorage.setItem('username', res.data.username)
+        sessionStorage.setItem('avatar', res.data.avatar)
         return redirect("/")
       };
       setLocalParams();

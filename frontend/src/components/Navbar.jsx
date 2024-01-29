@@ -7,7 +7,7 @@ import ProfilePill from "./ProfilePill";
 function Navbar() {
   return (
     <>
-      <nav className="flex flex-row justify-between sm:px-12 px-8 py-5 font-primary fixed w-full">
+      <nav className="flex flex-row justify-between sm:px-12 px-8 py-5 font-primary absolute w-full ">
         <h1 className="hidden sm:block text-3xl font-medium items-center">
           Socialify
         </h1>
