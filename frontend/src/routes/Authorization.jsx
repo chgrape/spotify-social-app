@@ -7,8 +7,6 @@ function Authorization() {
     const [token, setToken, removeToken] = useCookies('token')
     const url = "http://localhost:8000/api/user/info"
 
-    
-
     useEffect(() => { 
       const setLocalParams = async () => {
         const urlParams = new URLSearchParams(window.location.search)

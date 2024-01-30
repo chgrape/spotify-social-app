@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import axios from 'axios'
 import { Cookies } from "react-cookie";
 import { redirect } from "react-router-dom";
+import Dropdown from "../components/Dropdown";
+import DropdownChoice from "../components/DropdownChoice";
 
 function Create() {
   const url = "http://localhost:8000/api/posts"
@@ -30,53 +32,14 @@ function Create() {
   }
 
   return (
-    <div style={{ maxWidth: "820px" }} className="flex flex-col mx-auto pt-32">
-      <div className="mx-5">
+    <div className="max-w-[820px] flex flex-col mx-auto pt-32 px-2">
         <h1 className="pb-4 border-b border-neutral-400">Create a post</h1>
         <section className="my-5">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className={`w-72 flex py-2 px-5 bg-neutral-700 h-10 rounded-lg ${
-              isOpen ? "border ring-2 ring-white ring-opacity-10 " : "border"
-            } border-neutral-600 drop-shadow-lg hover:bg-neutral-600`}
-          >
-            <p>{group}</p>
-          </button>
-          <div
-            className={
-              !isOpen
-                ? "hidden"
-                : "z-10 absolute mt-2 bg-neutral-700 rounded-lg w-72 border border-neutral-600 ring-2 ring-white ring-opacity-10"
-            }
-          >
-            <button
-              onClick={(e) => {
-                setGroup(e.target.textContent);
-                setIsOpen(false);
-              }}
-              className="block px-4 py-2 rounded-lg hover:bg-neutral-600 text-left w-full"
-            >
-              Item1
-            </button>
-            <button
-              onClick={(e) => {
-                setGroup(e.target.textContent);
-                setIsOpen(false);
-              }}
-              className="block px-4 py-2 rounded-lg hover:bg-neutral-600 text-left w-full"
-            >
-              Item2
-            </button>
-            <button
-              onClick={(e) => {
-                setGroup(e.target.textContent);
-                setIsOpen(false);
-              }}
-              className="block px-4 py-2 rounded-lg hover:bg-neutral-600 text-left w-full"
-            >
-              Item3
-            </button>
-          </div>
+          <Dropdown name={group}>
+            <DropdownChoice name="Group 1" handleChange={(e) => setGroup(e.target.textContent)} />
+            <DropdownChoice name="Group 2" handleChange={(e) => setGroup(e.target.textContent)} />
+            <DropdownChoice name="Group 3" handleChange={(e) => setGroup(e.target.textContent)} />
+          </Dropdown>
         </section>
         <form
           ref={formRef}
@@ -99,6 +62,7 @@ function Create() {
             <button
               onClick={(e) => {
                 e.preventDefault();
+                setGroup("Choose Group")
                 setTitle("")
                 setDesc("")
               }}
@@ -116,7 +80,6 @@ function Create() {
             </button>
           </div>
         </form>
-      </div>
     </div>
   );
 }

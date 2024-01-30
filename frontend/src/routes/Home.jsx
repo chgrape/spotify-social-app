@@ -7,8 +7,7 @@ import group from "../assets/users.svg";
 function Home() {
   return (
     <main
-      style={{ maxWidth: "960px" }}
-      className="flex-wrap flex justify-center mx-auto pt-32"
+      className="flex-wrap flex justify-center mx-auto pt-32 max-w-[960px]"
     >
       <Card
         icon={find}

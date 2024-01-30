@@ -38,13 +38,7 @@ class PostController extends Controller
      */
     public function show(int $id)
     {
-        if($id > count(PostController::index()) || $id <= 0){
-            return response()->json(["message" => "Post doesn't exist"], Response::HTTP_BAD_REQUEST);
-        }
-        return Post::leftJoin('users', 'posts.user_id', '=', 'users.id')
-        ->where('users.id', '=', auth()->user()->id)
-        ->select('posts.*', 'users.name as username', 'users.avatar as avatar')
-        ->get()[$id-1];
+        return Post::find($id);
     }
 
     /**

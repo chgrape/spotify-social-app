@@ -7,9 +7,9 @@ function Profile() {
   const posts = useLoaderData()
   
   return (
-    <div className="pt-32 flex justify-center flex-col ">
-      <header className="mx-auto w-[52rem] justify-center flex">
-        <div className="w-[30rem]">
+    <div className="pt-32 flex justify-center flex-col max-w-[820px] mx-auto px-2">
+      <header className="mx-auto w-full justify-center flex">
+        <div className="w-full">
           <h1 className="text-5xl font-semibold my-3">{sessionStorage.getItem('username')}</h1>
           <aside className="my-5 flex flex-row ">
             <Stat statName="Likes" amount={posts.reduce((total, post) => total + post.like_count, 0)} />
