@@ -14,5 +14,6 @@ php artisan serve
 ---
 For the frontend(You need Node.js installed):
 ```
+npm install
 npm run dev
 ```
