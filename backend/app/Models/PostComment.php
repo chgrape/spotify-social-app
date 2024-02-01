@@ -9,7 +9,7 @@ class PostComment extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'username',
+        'user_id',
         'post_id',
         'content'
     ];

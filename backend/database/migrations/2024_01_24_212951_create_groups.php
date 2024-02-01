@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('theme');
             $table->string('description');
-            $table->enum('privacy', ['public', 'private'])->default('public');
             $table->timestamps();
         });
     }

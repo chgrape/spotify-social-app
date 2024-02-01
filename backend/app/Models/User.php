@@ -22,6 +22,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Genre::class, 'user_genre');
     }
 
+    public function groups(){
+        return $this->belongsToMany(Genre::class, 'user_group');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

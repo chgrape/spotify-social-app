@@ -17,17 +17,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        
-        return Post::leftJoin('users', 'posts.user_id', '=', 'users.id')
-        ->where('users.id', '=', auth()->user()->id)
-        ->select('posts.*', 'users.name', 'users.avatar')
-        ->get();
+        return Post::all();
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request,int $id)
     {
         Post::create(PostController::get_req_user($request));
         return response()->json(["message"=> "Created successfully"],Response::HTTP_CREATED);
@@ -38,7 +34,16 @@ class PostController extends Controller
      */
     public function show(int $id)
     {
-        return Post::find($id);
+        $comment_cnt = count(Post::leftJoin('post_comments', 'post_comments.post_id', '=', 'posts.id')
+        ->where('posts.id', '=', $id)
+        ->get()->all());
+        
+        $res = array_merge(Post::find($id)
+        ->leftJoin('users', 'posts.user_id', '=', 'users.id')
+        ->select('posts.*', 'users.name', 'users.avatar')
+        ->get()->first()->getAttributes(), ["comment_cnt"=>$comment_cnt]);
+
+        return $res;
     }
 
     /**
