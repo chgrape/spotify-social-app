@@ -12,27 +12,38 @@ function Post() {
   const [content, setContent] = useState("");
   const [offset, setOffset] = useState(1);
   const post = useLoaderData();
+  const [commentCount, setCommentCount] = useState(post.comment_cnt);
+  const [likes, setLikes] = useState(post.like_count);
   const [comments, setComments] = useState([]);
-  const url = "http://localhost:8000/api/post/" + post.id + "/comment";
+  const url = "http://localhost:8000/api/post/" + post.id;
   const cookies = new Cookies();
 
   useEffect(() => {
     const handleComments = async () => {
-      const res = await axios.get(url + "/" + offset + "/3", {
+      const res = await axios.get(url + "/comment/" + offset + "/3", {
         headers: {
           Authorization: "Bearer " + cookies.get("token"),
         },
       });
-      console.log(offset)
       setComments(res.data);
     };
     handleComments();
   }, [offset]);
 
+  const handleLike = async (e) =>{
+    e.preventDefault();
+    const res = await axios.post(url + "/like",{}, {
+      headers: {
+        Authorization: "Bearer " + cookies.get("token"),
+      }
+    });
+    setLikes(res.data);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = await axios.post(
-      url,
+      url + "/comment",
       {
         content: content,
       },
@@ -42,7 +53,12 @@ function Post() {
         },
       }
     );
+    setContent("");
+    setCommentCount(old => old + 1)
   };
+
+
+
   return (
     <div className="flex flex-col mx-auto pt-32 px-2 max-w-[820px]">
       <div className="bg-neutral-700 rounded-lg p-2">
@@ -64,9 +80,9 @@ function Post() {
             <p className="w-full break-all">{post.content}</p>
           </div>
           <div className="flex flex-row justify-end">
-            <p>{post.like_count}</p>
-            <img src={like} className="ml-2 mr-3" />
-            <p>{post.comment_cnt}</p>
+            <p>{likes}</p>
+            <img src={like} className="ml-2 mr-3 cursor-pointer" onClick={handleLike} />
+            <p>{commentCount}</p>
             <img className="ml-2" src={comment} />
           </div>
         </div>
@@ -84,7 +100,7 @@ function Post() {
                 setContent(e.target.value);
               }}
             />
-            <input type="submit" placeholder="Submit" />
+            <input className="cursor-pointer" type="submit" placeholder="Submit" />
           </form>
         </section>
         <section>
@@ -114,7 +130,7 @@ function Post() {
             <img
             className="cursor-pointer"
               onClick={(e) => {
-                if(offset + 3 > post.comment_cnt){
+                if(offset + 3 > commentCount){
                   return;
                 }
                 setOffset((old) => old + 3);

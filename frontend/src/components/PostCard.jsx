@@ -4,6 +4,7 @@ import max from "../assets/maximize.svg"
 import { Link } from 'react-router-dom'
 
 function PostCard({title, desc, likes, id}) {
+
   return (
     <div className='drop-shadow-lg md:h-24 w-full px-5 py-4 mt-5 rounded-xl bg-neutral-700 flex items-center justify-between'>
       <div className='flex items-center'>

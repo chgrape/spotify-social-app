@@ -29,6 +29,15 @@ const router = createBrowserRouter([
       {
         path: "/create",
         element: <Create />,
+        loader: async()=>{
+          const res = await axios.get(url + "/groups", {
+            headers: {
+              Authorization: "Bearer " + cookies.get("token"),
+              Accept: "*/*",
+            },
+          });
+          return res.data;
+        }
       },
       {
         path: "/profile",

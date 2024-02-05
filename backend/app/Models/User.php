@@ -23,7 +23,7 @@ class User extends Authenticatable
     }
 
     public function groups(){
-        return $this->belongsToMany(Genre::class, 'user_group');
+        return $this->belongsToMany(Group::class, 'user_group');
     }
 
     /**

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GroupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/post/{id}/comment', [PostCommentController::class, 'store']);
     Route::get('/post/{id}/comment/{offset}/{limit}', [PostCommentController::class, 'showMultiple']);
     Route::get('/post/{id}/comments', [PostCommentController::class, 'index']);
+
+    Route::post('/post/{id}/like', [PostController::class, 'like']);
+
+    Route::get('/groups', [GroupController::class, 'index']);
 });
