@@ -27,6 +27,7 @@ function Home() {
       />
       <Card
         icon={group}
+        path="/groups"
         title="Groups"
         description="Browse groups by music interests"
       />

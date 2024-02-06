@@ -3,8 +3,26 @@ import home from "../assets/icons8-home.svg";
 import about from "../assets/icons8-about.svg";
 import { Link, Outlet } from "react-router-dom";
 import ProfilePill from "./ProfilePill";
+import { useEffect, useState } from "react";
 
 function Navbar() {
+  const [avatar, setAvatar] = useState(sessionStorage.getItem('avatar'));
+  const [user, setUser] = useState(sessionStorage.getItem('username'));
+
+  useEffect(()=>{
+    const updateStorage = () => {
+      setAvatar(sessionStorage.getItem('avatar'))
+      setUser(sessionStorage.getItem('username'))
+      console.log('works')
+    }
+
+    window.addEventListener('storage', updateStorage);
+
+    return () => {
+      window.removeEventListener('storage', updateStorage);
+    };
+  },[])
+
   return (
     <>
       <nav className="flex flex-row justify-between sm:px-12 px-8 py-5 font-primary absolute w-full ">
@@ -22,7 +40,7 @@ function Navbar() {
             src={about}
             className="mx-5 transition-opacity duration-150 ease-in-out hover:opacity-100 opacity-70 h-6 w-6"
           />
-          {sessionStorage.getItem('username') && <ProfilePill />}
+          {user && <ProfilePill user={user} avatar={avatar} />}
         </div>
       </nav>
       <main>

@@ -10,6 +10,7 @@ import Authorization from "./routes/Authorization.jsx";
 import { Cookies } from "react-cookie";
 import axios from "axios";
 import Post from "./routes/Post.jsx";
+import Groups from "./routes/Groups.jsx";
 
 const url = "http://localhost:8000/api";
 const cookies = new Cookies();
@@ -44,6 +45,19 @@ const router = createBrowserRouter([
         element: <Profile />,
         loader: async () => {
           const res = await axios.get(url + "/posts", {
+            headers: {
+              Authorization: "Bearer " + cookies.get("token"),
+              Accept: "*/*",
+            },
+          });
+          return res.data;
+        },
+      },
+      {
+        path: "/groups",
+        element: <Groups />,
+        loader: async () => {
+          const res = await axios.get(url + "/groups", {
             headers: {
               Authorization: "Bearer " + cookies.get("token"),
               Accept: "*/*",
