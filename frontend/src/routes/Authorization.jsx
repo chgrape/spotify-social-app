@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { useCookies } from 'react-cookie'
-import { redirect } from 'react-router-dom'
+import { redirect, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 function Authorization() {
     const [token, setToken, removeToken] = useCookies('token')
     const url = "http://localhost:8000/api/user/info"
+    const navigate = useNavigate();
 
     useEffect(() => { 
       const setLocalParams = async () => {
@@ -28,7 +29,7 @@ function Authorization() {
         
         sessionStorage.setItem('username', res.data.username)
         sessionStorage.setItem('avatar', res.data.avatar)
-        return redirect("/")
+        navigate("/")
       };
       setLocalParams();
     }, [])

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Playlist;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -66,5 +67,10 @@ class UserController extends Controller
         ->pluck('genre')->all();
 
         return ['avatar' => auth()->user()->avatar, 'username'=> auth()->user()->name,'artists' => $artists, 'genres' => $genres];
+    }
+
+    public function showPlaylists()
+    {
+        return Playlist::where("user_id", auth()->user()->id)->get();
     }
 }

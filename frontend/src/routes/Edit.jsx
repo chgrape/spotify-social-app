@@ -1,53 +1,44 @@
-import { useRef, useState } from "react";
 import axios from "axios";
+import React, {  useRef, useState } from "react";
 import { Cookies } from "react-cookie";
-import { redirect, useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import Dropdown from "../components/Dropdown";
 import DropdownChoice from "../components/DropdownChoice";
 
-function Create() {
-  const url = "http://localhost:8000/api/posts";
-  const groups = useLoaderData();
-  const navigate = useNavigate();
+function Edit() {
+  const {post, groups} = useLoaderData();
+  const postGroup = groups.find(group => group.id === post.group_id);
+  const updatedGroups = groups.filter(group => group.id !== post.group_id)
+
+  const cookies = new Cookies();
+  const url = "http://localhost:8000/api/posts/" + post.id;
 
   const formRef = useRef(null);
-  const [group, setGroup] = useState("Choose Group");
+  const [group, setGroup] = useState(postGroup.theme);
 
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
 
-  const cookies = new Cookies();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(title == "" || desc == "" || group == "Choose Group"){
-      return;
-    }
-
-    const data = axios.post(
-      url,
-      {
-        title: title,
-        content: desc,
-        group: group
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + cookies.get("token"),
-        },
+    const res = axios.put(url, {
+      title:title,
+      desc:desc,
+      group:group
+    },{
+      headers:{
+        Authorization: "Bearer " + cookies.get('token')
       }
-    );
-
-    navigate("/")
-  };
-
+    })
+  }
+  
   return (
     <div className="max-w-[820px] flex flex-col mx-auto pt-32 px-2">
-      <h1 className="pb-4 border-b border-neutral-400">Create a post</h1>
+      <h1 className="pb-4 border-b border-neutral-400">Edit post</h1>
       <section className="my-5">
-        {groups ? (
+      {updatedGroups ? (
           <Dropdown name={group}>
-            {groups.map((gr) => (
+            {updatedGroups.map((gr) => (
               <DropdownChoice key={gr.id} name={gr.theme} handleChange={(e) => setGroup(e.target.textContent)}  />
             ))}
           </Dropdown>
@@ -62,7 +53,7 @@ function Create() {
       >
         <input
           className="bg-neutral-800 mb-5 w-full h-10 py-2 px-5 rounded-lg"
-          placeholder="Title"
+          placeholder={post.title}
           value={title}
           onChange={(e) => {
             setTitle(e.target.value);
@@ -70,7 +61,7 @@ function Create() {
         />
         <textarea
           className="bg-neutral-800 mb-5 w-full h-[calc(100%-10rem)] py-2 px-5 rounded-lg"
-          placeholder="Description"
+          placeholder={post.content}
           value={desc}
           onChange={(e) => {
             setDesc(e.target.value);
@@ -92,7 +83,7 @@ function Create() {
             type="submit"
             className="py-2 px-5 rounded-full bg-neutral-100 text-neutral-900 font-bold opacity-85 hover:opacity-100"
           >
-            Post
+            Edit
           </button>
         </div>
       </form>
@@ -100,4 +91,4 @@ function Create() {
   );
 }
 
-export default Create;
+export default Edit;

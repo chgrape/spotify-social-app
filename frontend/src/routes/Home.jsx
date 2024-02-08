@@ -3,6 +3,7 @@ import find from "../assets/icons8-search.svg";
 import create from "../assets/edit.svg";
 import profile from "../assets/user-circle.svg";
 import group from "../assets/users.svg";
+import music from "../assets/music.svg"
 
 function Home() {
   return (
@@ -32,9 +33,10 @@ function Home() {
         description="Browse groups by music interests"
       />
       <Card
-        icon={group}
-        title="Placeholder"
-        description="Consectetur fugiat ullamco elit qui magna et."
+        icon={music}
+        title="Playlists"
+        path="/playlists"
+        description="See playlist statistics"
       />
     </main>
   );

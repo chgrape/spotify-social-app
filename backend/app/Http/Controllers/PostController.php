@@ -54,10 +54,8 @@ class PostController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        Post::leftJoin('users', 'posts.user_id', '=', 'users.id')
-        ->where('users.id', '=', auth()->user()->id)
-        ->get()[$id-1]
-        ->update(PostController::get_req_user($request));
+        Post::find($id)
+        ->update($request->all());
         return response()->json(["message"=> "Updated successfully"],Response::HTTP_CREATED);
     }
 

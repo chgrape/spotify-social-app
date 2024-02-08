@@ -20,6 +20,7 @@ use App\Http\Controllers\GroupController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/info', [UserController::class, 'showUserInfo']);
+    Route::get('/user/playlists', [UserController::class, 'showPlaylists']);
 
     Route::get('/posts', [PostController::class, 'index']);
     Route::get('/posts/{id}', [PostController::class, 'show']);
@@ -34,4 +35,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/post/{id}/like', [PostController::class, 'like']);
 
     Route::get('/groups', [GroupController::class, 'index']);
+    Route::get('/groups/{id}', [GroupController::class, 'show']);
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import comment from "../assets/message-circle.svg";
 import like from "../assets/heart.svg";
 import axios from "axios";
@@ -7,11 +7,14 @@ import { Cookies } from "react-cookie";
 import Comment from "../components/Comment";
 import left from "../assets/chevron-left.svg";
 import right from "../assets/chevron-right.svg";
+import edit from "../assets/edit-3.svg"
+import del from "../assets/trash.svg"
 
 function Post() {
   const [content, setContent] = useState("");
   const [offset, setOffset] = useState(1);
   const post = useLoaderData();
+  const user = sessionStorage.getItem('username');
   const [commentCount, setCommentCount] = useState(post.comment_cnt);
   const [likes, setLikes] = useState(post.like_count);
   const [comments, setComments] = useState([]);
@@ -30,8 +33,12 @@ function Post() {
     handleComments();
   }, [offset]);
 
-  const handleLike = async (e) =>{
+  const handleDelete = async (e) => {
     e.preventDefault();
+    
+  }
+
+  const handleLike = async () =>{
     const res = await axios.post(url + "/like",{}, {
       headers: {
         Authorization: "Bearer " + cookies.get("token"),
@@ -79,7 +86,9 @@ function Post() {
             </div>
             <p className="w-full break-all">{post.content}</p>
           </div>
-          <div className="flex flex-row justify-end">
+          <div className="flex flex-row justify-end items-center">
+            {user == post.name && <Link to={"/post/" + post.id + "/edit"}><img src={edit} className="h-5 w-5 ml-2 cursor-pointer opacity-80" /></Link>}
+            {user == post.name && <img src={del} className="h-5 w-5 ml-2 mr-12 cursor-pointer opacity-80" onClick={handleDelete} />}
             <p>{likes}</p>
             <img src={like} className="ml-2 mr-3 cursor-pointer" onClick={handleLike} />
             <p>{commentCount}</p>
@@ -119,7 +128,7 @@ function Post() {
           <div className="flex justify-end gap-5">
             <img
             className="cursor-pointer"
-              onClick={(e) => {
+              onClick={() => {
                 if(offset - 3 < 0){
                   return;
                 }

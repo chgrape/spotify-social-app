@@ -8,6 +8,9 @@ export default {
     extend: {
       fontFamily:{
         primary: "DM Sans"
+      },
+      transitionProperty:{
+        'width': 'width'
       }
     },
   },

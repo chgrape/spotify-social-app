@@ -11,6 +11,9 @@ import { Cookies } from "react-cookie";
 import axios from "axios";
 import Post from "./routes/Post.jsx";
 import Groups from "./routes/Groups.jsx";
+import Edit from "./routes/Edit.jsx";
+import Group from "./routes/Group.jsx";
+import Playlists from "./routes/Playlists.jsx";
 
 const url = "http://localhost:8000/api";
 const cookies = new Cookies();
@@ -37,6 +40,7 @@ const router = createBrowserRouter([
               Accept: "*/*",
             },
           });
+          
           return res.data;
         }
       },
@@ -77,6 +81,52 @@ const router = createBrowserRouter([
             },
           });
           return res.data;
+        }
+      },
+      {
+        path: "/group/:id",
+        element: <Group />,
+        loader: async ({params}) => {
+          const res = await axios.get(url + "/groups/" + params.id, {
+            headers: {
+              Authorization: "Bearer " + cookies.get("token"),
+              Accept: "*/*",
+            },
+          });
+          return res.data;
+        }
+      },
+      {
+        path: "/playlists",
+        element: <Playlists />,
+        loader: async () => {
+          const res = await axios.get(url + "/user/playlists", {
+            headers: {
+              Authorization: "Bearer " + cookies.get("token"),
+              Accept: "*/*",
+            },
+          });
+          return res.data;
+        }
+      },
+      {
+        path: "/post/:id/edit",
+        element: <Edit />,
+        loader: async ({params}) => {
+          const post = await axios.get(url + "/posts/" + params.id, {
+            headers: {
+              Authorization: "Bearer " + cookies.get("token"),
+              Accept: "*/*",
+            },
+          });
+          const groups = await axios.get(url + "/groups", {
+            headers: {
+              Authorization: "Bearer " + cookies.get("token"),
+              Accept: "*/*",
+            },
+          });
+
+          return {post: post.data, groups: groups.data};
         }
       },
       {

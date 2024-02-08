@@ -20,6 +20,7 @@ class AuthController extends Controller
 
     function callback(){
         $user = Socialite::driver("spotify")->stateless()->user();
+        $playlists = $this->user_info_controller->synthesize_playlist_data($user);
         $ar = $this->user_info_controller->get_artists($user);
 
         $artists = array_slice($ar,0,20,true);
@@ -39,6 +40,8 @@ class AuthController extends Controller
                 'avatar' => $user->avatar
             ]);
         }
+
+        $this->user_info_controller->create_playlist_objs($playlists, User::where('name', $user->name)->first()->id);
 
         $tkn = User::where('name', $user->name)->first()->createToken('sanc_token')->plainTextToken;
         

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\User;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -27,9 +28,9 @@ class GroupController extends Controller
         //
     }
 
-    public function show(Group $group)
+    public function show(int $id)
     {
-        //
+        return Post::where('group_id', $id)->get();
     }
 
     public function update(Request $request, Group $group)
