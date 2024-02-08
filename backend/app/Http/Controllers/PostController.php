@@ -54,8 +54,10 @@ class PostController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        $group = Group::where("theme", $request->group)->first();
+
         Post::find($id)
-        ->update($request->all());
+        ->update($request->except("group"), ["group_id" => $group->id]);
         return response()->json(["message"=> "Updated successfully"],Response::HTTP_CREATED);
     }
 
@@ -64,10 +66,7 @@ class PostController extends Controller
      */
     public function destroy(int $id)
     {
-        Post::leftJoin('users', 'posts.user_id', '=', 'users.id')
-        ->where('users.id', '=', auth()->user()->id)
-        ->get()[$id-1]
-        ->delete();
+        Post::find($id)->delete();
         return response()->json(["message"=> "Deleted successfully"],Response::HTTP_CREATED);
     }
 

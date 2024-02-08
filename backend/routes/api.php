@@ -36,4 +36,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/groups', [GroupController::class, 'index']);
     Route::get('/groups/{id}', [GroupController::class, 'show']);
+    Route::get('/group/potential', [GroupController::class,'showPotential']);
+    Route::patch('/groups/{id}', [GroupController::class,'store']);
 });

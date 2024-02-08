@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import comment from "../assets/message-circle.svg";
 import like from "../assets/heart.svg";
 import axios from "axios";
@@ -20,6 +20,9 @@ function Post() {
   const [comments, setComments] = useState([]);
   const url = "http://localhost:8000/api/post/" + post.id;
   const cookies = new Cookies();
+  const navigation = useNavigate();
+
+  console.log(post)
 
   useEffect(() => {
     const handleComments = async () => {
@@ -35,7 +38,11 @@ function Post() {
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    
+    const res = await axios.delete("http://localhost:8000/api/posts/" + post.id, {headers:{
+      Authorization: "Bearer " + cookies.get("token"),
+
+    }})
+    navigation("/profile")
   }
 
   const handleLike = async () =>{
@@ -49,6 +56,9 @@ function Post() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(content === ""){
+      return;
+    }
     const data = await axios.post(
       url + "/comment",
       {

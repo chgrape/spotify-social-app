@@ -13,10 +13,6 @@ function Authorization() {
         const urlParams = new URLSearchParams(window.location.search)
         const tkn = urlParams.get('token')
   
-        if(token){
-            console.log(token)
-        }
-  
         if(tkn){
             setToken('token', tkn)
         }

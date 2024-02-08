@@ -13,6 +13,7 @@ function Home() {
       <Card
         icon={find}
         title="Find"
+        path="/groups/potential"
         description="Find people with similair tastes in music"
       />
       <Card

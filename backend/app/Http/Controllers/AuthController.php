@@ -28,7 +28,7 @@ class AuthController extends Controller
 
         $artist_objs = $this->user_info_controller->create_artists($artists);
         $genre_objs = $this->user_info_controller->create_genres($fav_genres);
-        $group_objs = $this->user_info_controller->create_groups($artists);
+        $group_objs = $this->user_info_controller->create_groups($artists, $fav_genres);
 
         if(!User::where('name', $user->name)->exists()){
             User::create([
@@ -47,7 +47,7 @@ class AuthController extends Controller
         
         User::where('name', $user->name)->first()->artists()->sync($artist_objs);
         User::where('name', $user->name)->first()->genres()->sync($genre_objs);
-        User::where('name', $user->name)->first()->groups()->sync($group_objs);
+        User::where('name', $user->name)->first()->groups()->syncWithoutDetaching($group_objs);
 
         return redirect('http://localhost:5173/authorization?token=' . $tkn);
     }

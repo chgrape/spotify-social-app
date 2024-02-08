@@ -23,9 +23,37 @@ class GroupController extends Controller
         return $group_arr;
     }
 
-    public function store(Request $request)
+    public function showPotential(){
+        $genres = User::leftJoin("user_genre","user_genre.user_id","=","users.id")
+        ->leftJoin("genres", "user_genre.genre_id", "=", "genres.id")
+        ->where('users.id', '=', auth()->user()->id)
+        ->select('genres.name as genre')
+        ->pluck('genre')->all();
+
+        $groups = [];
+
+        $user = User::find(auth()->user()->id);
+
+        foreach($genres as $genre){
+            $flag = false;
+            foreach($user->groups as $group){
+                if($group->theme == ucwords($genre)){
+                    $flag = true;
+                    break;
+                }
+            }
+            if($flag == false){
+                $groups[] = Group::where('theme', ucwords($genre))->get()->first();
+            }
+            
+        }
+
+        return $groups;
+    }
+
+    public function store(int $id)
     {
-        //
+        User::find(auth()->user()->id)->groups()->syncWithoutDetaching($id);
     }
 
     public function show(int $id)

@@ -73,7 +73,7 @@ class UserInfoController extends Controller
         return $response->json()["access_token"];
     }
 
-    public function create_groups($artists)
+    public function create_groups($artists, $genres)
     {
         $group_objs = [];
 
@@ -87,6 +87,15 @@ class UserInfoController extends Controller
             $group_objs[] = Group::where('theme', $artist["name"])->first()->id;
         }
 
+        foreach($genres as $genre){
+            if (!Group::where('theme', $genre)->exists()) {
+                Group::create([
+                    'theme' => ucwords($genre),
+                    'description' => "A group about " . ucwords($genre)
+                ]);
+            }
+        }
+
         return $group_objs;
     }
 
@@ -94,7 +103,7 @@ class UserInfoController extends Controller
     {
         $res = Http::withHeaders(['Authorization' => "Bearer " . $user->token])->get('https://api.spotify.com/v1/me/playlists');
         if (empty($res->json()["items"])) {
-            return response()->json(['message' => "You either have no playlists or they're all private"], Response::HTTP_OK);
+            return [];
         }
         $items = $res->json()["items"];
         $all_playlist_params = [];
@@ -151,6 +160,9 @@ class UserInfoController extends Controller
     }
 
     public function create_playlist_objs($playlists, $user_id){
+        if(empty($playlists)){
+            return;
+        }
         foreach( $playlists as $playlist ){
             if(!Playlist::where('playlist_id', $playlist["playlist_id"])->exists()){
                 $playlist = array_merge($playlist, ["user_id" => $user_id]);

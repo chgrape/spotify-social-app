@@ -14,6 +14,7 @@ import Groups from "./routes/Groups.jsx";
 import Edit from "./routes/Edit.jsx";
 import Group from "./routes/Group.jsx";
 import Playlists from "./routes/Playlists.jsx";
+import PotentialGroups from "./routes/PotentialGroups.jsx";
 
 const url = "http://localhost:8000/api";
 const cookies = new Cookies();
@@ -62,6 +63,19 @@ const router = createBrowserRouter([
         element: <Groups />,
         loader: async () => {
           const res = await axios.get(url + "/groups", {
+            headers: {
+              Authorization: "Bearer " + cookies.get("token"),
+              Accept: "*/*",
+            },
+          });
+          return res.data;
+        },
+      },
+      {
+        path: "/groups/potential",
+        element: <PotentialGroups />,
+        loader: async () => {
+          const res = await axios.get(url + "/group/potential", {
             headers: {
               Authorization: "Bearer " + cookies.get("token"),
               Accept: "*/*",

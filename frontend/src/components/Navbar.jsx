@@ -8,12 +8,10 @@ import { useEffect, useState } from "react";
 function Navbar() {
   const [avatar, setAvatar] = useState(sessionStorage.getItem('avatar'));
   const [user, setUser] = useState(sessionStorage.getItem('username'));
-
   useEffect(()=>{
     const updateStorage = () => {
       setAvatar(sessionStorage.getItem('avatar'))
       setUser(sessionStorage.getItem('username'))
-      console.log('works')
     }
 
     window.addEventListener('storage', updateStorage);
