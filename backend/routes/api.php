@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostCommentController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\GroupController;
 |
 */
 
+Route::get("/auth/check", [AuthController::class, 'check_auth']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/info', [UserController::class, 'showUserInfo']);

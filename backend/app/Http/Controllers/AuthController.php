@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
@@ -50,6 +51,11 @@ class AuthController extends Controller
         User::where('name', $user->name)->first()->groups()->syncWithoutDetaching($group_objs);
 
         return redirect('http://localhost:5173/authorization?token=' . $tkn);
+    }
+
+    public function check_auth(){
+
+        return Auth::check();
     }
 
 }

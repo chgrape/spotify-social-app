@@ -12,7 +12,9 @@ function Authorization() {
       const setLocalParams = async () => {
         const urlParams = new URLSearchParams(window.location.search)
         const tkn = urlParams.get('token')
-  
+        
+        await axios.get('http://localhost:8000/sanctum/csrf-cookie')
+
         if(tkn){
             setToken('token', tkn)
         }
