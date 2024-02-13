@@ -24,9 +24,11 @@ function Authorization() {
             'Authorization': 'Bearer ' + tkn
           }
         })
-        
+
         sessionStorage.setItem('username', res.data.username)
         sessionStorage.setItem('avatar', res.data.avatar)
+        window.dispatchEvent(new Event('storage'))
+
         navigate("/")
       };
       setLocalParams();
@@ -34,7 +36,7 @@ function Authorization() {
 
 
   return (
-    <div>Authorization</div>
+    <div></div>
   )
 }
 

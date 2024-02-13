@@ -16,6 +16,7 @@ import Group from "./routes/Group.jsx";
 import Playlists from "./routes/Playlists.jsx";
 import PotentialGroups from "./routes/PotentialGroups.jsx";
 import { requireAuth } from "./assets/utils.js";
+import ErrorComponent from "./components/ErrorComponent.jsx";
 
 const url = "http://localhost:8000/api";
 const cookies = new Cookies();
@@ -23,6 +24,7 @@ const cookies = new Cookies();
 const router = createBrowserRouter([
   {
     element: <Navbar />,
+    errorElement: <ErrorComponent />,
     children: [
       {
         path: "/login",
@@ -103,6 +105,8 @@ const router = createBrowserRouter([
               Authorization: "Bearer " + cookies.get("token"),
               Accept: "*/*",
             },
+          }).catch((e)=> {
+            throw new Response("msg", {status: 500})
           });
           return res.data;
         }
@@ -117,6 +121,8 @@ const router = createBrowserRouter([
               Authorization: "Bearer " + cookies.get("token"),
               Accept: "*/*",
             },
+          }).catch((e)=> {
+            throw new Response("msg", {status: 500})
           });
           return res.data;
         }
@@ -145,7 +151,10 @@ const router = createBrowserRouter([
               Authorization: "Bearer " + cookies.get("token"),
               Accept: "*/*",
             },
-          });
+          }).catch((e)=> {
+            throw new Response("msg", {status: 404})
+          } );
+          
           const groups = await axios.get(url + "/groups", {
             headers: {
               Authorization: "Bearer " + cookies.get("token"),

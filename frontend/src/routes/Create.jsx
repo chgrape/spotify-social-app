@@ -42,7 +42,7 @@ function Create() {
   };
 
   return (
-    <div className="max-w-[820px] flex flex-col mx-auto pt-32 px-2">
+    <div className="max-w-[820px] flex flex-col mx-auto pt-32 px-5 mb-5">
       <h1 className='text-2xl border-b pb-4 mb-5'>Create a post</h1>
       <section className="my-5">
         {groups ? (

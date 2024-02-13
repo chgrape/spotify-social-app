@@ -31,31 +31,32 @@ class AuthController extends Controller
         $genre_objs = $this->user_info_controller->create_genres($fav_genres);
         $group_objs = $this->user_info_controller->create_groups($artists, $fav_genres);
 
-        if(!User::where('name', $user->name)->exists()){
-            User::create([
-                'name' => $user->name,
-                'token' => $user->token,
-                'last_info_update' => now(),
-                'last_refresh' => now(),
-                'refresh_token' => $user->refreshToken,
-                'avatar' => $user->avatar
-            ]);
-        }
+        $created_user = User::firstOrCreate([
+            'name' => $user->name,
+            'token' => $user->token,
+            'last_info_update' => now(),
+            'last_refresh' => now(),
+            'refresh_token' => $user->refreshToken,
+            'avatar' => $user->avatar
+        ]);
 
-        $this->user_info_controller->create_playlist_objs($playlists, User::where('name', $user->name)->first()->id);
+        $this->user_info_controller->create_playlist_objs($playlists, $created_user->id);
 
-        $tkn = User::where('name', $user->name)->first()->createToken('sanc_token')->plainTextToken;
+        $tkn = $created_user->createToken('sanc_token')->plainTextToken;
         
-        User::where('name', $user->name)->first()->artists()->sync($artist_objs);
-        User::where('name', $user->name)->first()->genres()->sync($genre_objs);
-        User::where('name', $user->name)->first()->groups()->syncWithoutDetaching($group_objs);
+        $created_user->artists()->sync($artist_objs);
+        $created_user->genres()->sync($genre_objs);
+        $created_user->groups()->syncWithoutDetaching($group_objs);
 
         return redirect('http://localhost:5173/authorization?token=' . $tkn);
     }
 
     public function check_auth(){
-
         return Auth::check();
+    }
+
+    public function logout(){
+        return auth()->user()->tokens()->delete();
     }
 
 }

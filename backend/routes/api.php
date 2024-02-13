@@ -18,9 +18,11 @@ use App\Http\Controllers\GroupController;
 |
 */
 
-Route::get("/auth/check", [AuthController::class, 'check_auth']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get("/auth/check", [AuthController::class, 'check_auth']);
+    Route::get("/logout", [AuthController::class,'logout']);
+
     Route::get('/user/info', [UserController::class, 'showUserInfo']);
     Route::get('/user/playlists', [UserController::class, 'showPlaylists']);
 

@@ -22,8 +22,6 @@ function Post() {
   const cookies = new Cookies();
   const navigation = useNavigate();
 
-  console.log(post)
-
   useEffect(() => {
     const handleComments = async () => {
       const res = await axios.get(url + "/comment/" + offset + "/3", {
@@ -77,7 +75,7 @@ function Post() {
 
 
   return (
-    <div className="flex flex-col mx-auto pt-32 px-2 max-w-[820px]">
+    <div className="flex flex-col mx-auto pt-32 px-5 max-w-[820px]">
       <div className="bg-neutral-700 rounded-lg p-2">
         <div className="w-full bg-neutral-700 rounded-t-lg p-3 flex flex-col justify-between">
           <div>

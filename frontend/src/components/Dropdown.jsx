@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import useClickOutside from "../assets/useClickOutside";
 
 const Dropdown = ({ name, children }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef(null)
+  useClickOutside(menuRef, ()=>setIsOpen(false))
 
   return (
     <>
@@ -15,6 +18,7 @@ const Dropdown = ({ name, children }) => {
         {name}
       </button>
       <div
+        ref={menuRef}
         className={
           !isOpen
             ? "hidden"

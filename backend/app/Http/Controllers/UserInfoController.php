@@ -101,7 +101,12 @@ class UserInfoController extends Controller
 
     public function synthesize_playlist_data($user)
     {
-        $res = Http::withHeaders(['Authorization' => "Bearer " . $user->token])->get('https://api.spotify.com/v1/me/playlists');
+
+        
+        $res = Http::withHeaders(['Authorization' => "Bearer " . $user->token])
+        ->get('https://api.spotify.com/v1/me/playlists');
+
+
         if (empty($res->json()["items"])) {
             return [];
         }
