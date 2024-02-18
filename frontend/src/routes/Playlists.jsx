@@ -6,7 +6,7 @@ function Playlists() {
   const playlists = useLoaderData();
 
   return (
-    <div className="pt-32 mx-auto max-w-[820px]">
+    <div className="pt-32 mx-auto max-w-[920px] p-5">
       <h1 className="border-b pb-6 text-3xl">Your playlists</h1>
       <div className="mt-12 flex w-full flex-wrap justify-center">
         {playlists ? (

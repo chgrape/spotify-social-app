@@ -66,11 +66,17 @@ class UserController extends Controller
         ->select('genres.name as genre')
         ->pluck('genre')->all();
 
-        return ['avatar' => auth()->user()->avatar, 'username'=> auth()->user()->name,'artists' => $artists, 'genres' => $genres];
+        $user = auth()->user();
+
+        return ['avatar' => $user->avatar, 'username'=> $user->name,'artists' => $artists, 'genres' => $genres];
     }
 
     public function showPlaylists()
     {
         return Playlist::where("user_id", auth()->user()->id)->get();
+    }
+
+    public function showGroupCount(){
+        return count(auth()->user()->groups);
     }
 }

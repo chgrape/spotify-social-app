@@ -8,7 +8,7 @@ import music from "../assets/music.svg"
 function Home() {
   return (
     <main
-      className="flex-wrap flex justify-center mx-auto pt-32 max-w-[960px]"
+      className="flex-wrap flex justify-center mx-auto pt-32 max-w-[960px] px-3 pb-5"
     >
       <Card
         icon={find}

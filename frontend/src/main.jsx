@@ -7,8 +7,7 @@ import Home from "./routes/Home.jsx";
 import Create from "./routes/Create.jsx";
 import Profile from "./routes/Profile.jsx";
 import Authorization from "./routes/Authorization.jsx";
-import { Cookies } from "react-cookie";
-import axios from "axios";
+import axios from "../axios.config.js";
 import Post from "./routes/Post.jsx";
 import Groups from "./routes/Groups.jsx";
 import Edit from "./routes/Edit.jsx";
@@ -17,9 +16,6 @@ import Playlists from "./routes/Playlists.jsx";
 import PotentialGroups from "./routes/PotentialGroups.jsx";
 import { requireAuth } from "./assets/utils.js";
 import ErrorComponent from "./components/ErrorComponent.jsx";
-
-const url = "http://localhost:8000/api";
-const cookies = new Cookies();
 
 const router = createBrowserRouter([
   {
@@ -43,13 +39,7 @@ const router = createBrowserRouter([
         element: <Create />,
         loader: async()=>{
           await requireAuth();
-          const res = await axios.get(url + "/groups", {
-            headers: {
-              Authorization: "Bearer " + cookies.get("token"),
-              Accept: "*/*",
-            },
-          });
-          
+          const res = await axios.get("/groups");
           return res.data;
         }
       },
@@ -58,13 +48,9 @@ const router = createBrowserRouter([
         element: <Profile />,
         loader: async () => {
           await requireAuth();
-          const res = await axios.get(url + "/posts", {
-            headers: {
-              Authorization: "Bearer " + cookies.get("token"),
-              Accept: "*/*",
-            },
-          });
-          return res.data;
+          const posts = await axios.get("/posts");
+          const group_count = await axios.get("/group/count")
+          return {posts: posts.data, group_count: group_count.data};
         },
       },
       {
@@ -72,12 +58,7 @@ const router = createBrowserRouter([
         element: <Groups />,
         loader: async () => {
           await requireAuth();
-          const res = await axios.get(url + "/groups", {
-            headers: {
-              Authorization: "Bearer " + cookies.get("token"),
-              Accept: "*/*",
-            },
-          });
+          const res = await axios.get("/groups");
           return res.data;
         },
       },
@@ -86,12 +67,7 @@ const router = createBrowserRouter([
         element: <PotentialGroups />,
         loader: async () => {
           await requireAuth();
-          const res = await axios.get(url + "/group/potential", {
-            headers: {
-              Authorization: "Bearer " + cookies.get("token"),
-              Accept: "*/*",
-            },
-          });
+          const res = await axios.get("/group/potential");
           return res.data;
         },
       },
@@ -100,12 +76,7 @@ const router = createBrowserRouter([
         element: <Post />,
         loader: async ({params}) => {
           await requireAuth();
-          const res = await axios.get(url + "/posts/" + params.id, {
-            headers: {
-              Authorization: "Bearer " + cookies.get("token"),
-              Accept: "*/*",
-            },
-          }).catch((e)=> {
+          const res = await axios.get("/posts/" + params.id).catch((e)=> {
             throw new Response("msg", {status: 500})
           });
           return res.data;
@@ -116,12 +87,7 @@ const router = createBrowserRouter([
         element: <Group />,
         loader: async ({params}) => {
           await requireAuth();
-          const res = await axios.get(url + "/groups/" + params.id, {
-            headers: {
-              Authorization: "Bearer " + cookies.get("token"),
-              Accept: "*/*",
-            },
-          }).catch((e)=> {
+          const res = await axios.get("/groups/" + params.id).catch((e)=> {
             throw new Response("msg", {status: 500})
           });
           return res.data;
@@ -132,12 +98,7 @@ const router = createBrowserRouter([
         element: <Playlists />,
         loader: async () => {
           await requireAuth();
-          const res = await axios.get(url + "/user/playlists", {
-            headers: {
-              Authorization: "Bearer " + cookies.get("token"),
-              Accept: "*/*",
-            },
-          });
+          const res = await axios.get("/user/playlists");
           return res.data;
         }
       },
@@ -146,21 +107,11 @@ const router = createBrowserRouter([
         element: <Edit />,
         loader: async ({params}) => {
           await requireAuth();
-          const post = await axios.get(url + "/posts/" + params.id, {
-            headers: {
-              Authorization: "Bearer " + cookies.get("token"),
-              Accept: "*/*",
-            },
-          }).catch((e)=> {
+          const post = await axios.get("/posts/" + params.id).catch((e)=> {
             throw new Response("msg", {status: 404})
           } );
           
-          const groups = await axios.get(url + "/groups", {
-            headers: {
-              Authorization: "Bearer " + cookies.get("token"),
-              Accept: "*/*",
-            },
-          });
+          const groups = await axios.get("/groups");
 
           return {post: post.data, groups: groups.data};
         }

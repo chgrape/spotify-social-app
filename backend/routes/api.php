@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/user/info', [UserController::class, 'showUserInfo']);
     Route::get('/user/playlists', [UserController::class, 'showPlaylists']);
+    Route::get('/group/count', [UserController::class,'showGroupCount']);
 
     Route::get('/posts', [PostController::class, 'index']);
     Route::get('/posts/{id}', [PostController::class, 'show']);

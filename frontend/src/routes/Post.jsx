@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import comment from "../assets/message-circle.svg";
 import like from "../assets/heart.svg";
-import axios from "axios";
-import { Cookies } from "react-cookie";
+import axios from "../../axios.config.js";
 import Comment from "../components/Comment";
 import left from "../assets/chevron-left.svg";
 import right from "../assets/chevron-right.svg";
@@ -14,41 +13,29 @@ function Post() {
   const [content, setContent] = useState("");
   const [offset, setOffset] = useState(1);
   const post = useLoaderData();
-  const user = sessionStorage.getItem('username');
+  const user = localStorage.getItem('username');
   const [commentCount, setCommentCount] = useState(post.comment_cnt);
   const [likes, setLikes] = useState(post.like_count);
   const [comments, setComments] = useState([]);
-  const url = "http://localhost:8000/api/post/" + post.id;
-  const cookies = new Cookies();
   const navigation = useNavigate();
+  const submitRef = useRef(null);
 
   useEffect(() => {
     const handleComments = async () => {
-      const res = await axios.get(url + "/comment/" + offset + "/3", {
-        headers: {
-          Authorization: "Bearer " + cookies.get("token"),
-        },
-      });
+      const res = await axios.get("/post/" + post.id + "/comment/" + offset + "/3");
       setComments(res.data);
     };
     handleComments();
-  }, [offset]);
+  }, [offset, commentCount]);
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    const res = await axios.delete("http://localhost:8000/api/posts/" + post.id, {headers:{
-      Authorization: "Bearer " + cookies.get("token"),
-
-    }})
+    await axios.delete("/posts/" + post.id)
     navigation("/profile")
   }
 
   const handleLike = async () =>{
-    const res = await axios.post(url + "/like",{}, {
-      headers: {
-        Authorization: "Bearer " + cookies.get("token"),
-      }
-    });
+    const res = await axios.post("/post/" + post.id + "/like");
     setLikes(res.data);
   }
 
@@ -57,17 +44,11 @@ function Post() {
     if(content === ""){
       return;
     }
-    const data = await axios.post(
-      url + "/comment",
+    await axios.post(
+      "/post/" + post.id + "/comment",
       {
         content: content,
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + cookies.get("token"),
-        },
-      }
-    );
+      });
     setContent("");
     setCommentCount(old => old + 1)
   };
@@ -107,7 +88,7 @@ function Post() {
           <h1 className="pb-4 border-b border-neutral-400 mb-5">
             Add a comment
           </h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} ref={submitRef}>
             <textarea
               className="bg-neutral-800 mb-5 w-full py-2 px-5 rounded-lg max-h-32 resize-none"
               placeholder="Description"

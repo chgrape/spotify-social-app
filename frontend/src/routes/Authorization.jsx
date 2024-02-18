@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useCookies } from 'react-cookie'
-import { redirect, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 function Authorization() {
@@ -16,7 +16,8 @@ function Authorization() {
         await axios.get('http://localhost:8000/sanctum/csrf-cookie')
 
         if(tkn){
-            setToken('token', tkn)
+            setToken('token', tkn, {maxAge: 7200})
+            window.dispatchEvent(new Event('storage'))
         }
   
         const res = await axios.get(url, {
@@ -25,8 +26,8 @@ function Authorization() {
           }
         })
 
-        sessionStorage.setItem('username', res.data.username)
-        sessionStorage.setItem('avatar', res.data.avatar)
+        localStorage.setItem('username', res.data.username)
+        localStorage.setItem('avatar', res.data.avatar)
         window.dispatchEvent(new Event('storage'))
 
         navigate("/")

@@ -6,12 +6,12 @@ import ProfilePill from "./ProfilePill";
 import { useEffect, useState } from "react";
 
 function Navbar() {
-  const [avatar, setAvatar] = useState(sessionStorage.getItem('avatar'));
-  const [user, setUser] = useState(sessionStorage.getItem('username'));
+  const [avatar, setAvatar] = useState(localStorage.getItem('avatar'));
+  const [user, setUser] = useState(localStorage.getItem('username'));
   useEffect(()=>{
     const updateStorage = () => {
-      setAvatar(sessionStorage.getItem('avatar'))
-      setUser(sessionStorage.getItem('username'))
+      setAvatar(localStorage.getItem('avatar'))
+      setUser(localStorage.getItem('username'))
     }
 
     window.addEventListener('storage', updateStorage);

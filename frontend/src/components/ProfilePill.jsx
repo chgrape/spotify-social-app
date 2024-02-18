@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import arrow from "../assets/chevron-down.svg"
 import Avatar from "./Avatar"
 import { Cookies } from "react-cookie"
 import { useNavigate } from "react-router-dom"
-import axios from "axios"
+import axios from "../../axios.config.js"
 import useClickOutside from "../assets/useClickOutside"
 
 
@@ -16,12 +16,8 @@ function ProfilePill({user, avatar}) {
 
   const handleLogout = async (e) => {
     e.preventDefault()
-    axios.get('http://localhost:8000/api/logout', {
-      headers:{
-        Authorization: "Bearer " + cookies.get('token')
-      }
-    })
-    sessionStorage.clear()
+    axios.get('/logout')
+    localStorage.clear()
     cookies.remove('token')
     window.dispatchEvent(new Event('storage'))
     navigate("/login")

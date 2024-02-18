@@ -4,17 +4,17 @@ import PostCard from "../components/PostCard";
 import { useLoaderData } from "react-router-dom";
 
 function Profile() {
-  const posts = useLoaderData()
-  const [avatar, setAvatar] = useState(sessionStorage.getItem('avatar'));
-
+  const {posts, group_count} = useLoaderData()
+  const [avatar, setAvatar] = useState(localStorage.getItem('avatar'));
+  
   return (
-    <div className="pt-32 flex justify-center flex-col max-w-[820px] mx-auto px-5">
+    <div className="pt-32 flex justify-center flex-col max-w-[820px] mx-auto px-5 pb-5">
       <header className="mx-auto w-full justify-center flex">
         <div className="w-full">
-          <h1 className="text-5xl font-semibold my-3">{sessionStorage.getItem('username')}</h1>
+          <h1 className="text-5xl font-semibold my-3">{localStorage.getItem('username')}</h1>
           <aside className="my-5 flex flex-row ">
             <Stat statName="Likes" amount={posts.reduce((total, post) => total + post.like_count, 0)} />
-            <Stat statName="Groups" amount="20" />
+            <Stat statName="Groups" amount={group_count} />
             <Stat statName="Posts" amount={posts.length} />
           </aside>
         </div>

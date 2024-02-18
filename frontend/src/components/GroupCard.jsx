@@ -1,25 +1,20 @@
 import React from "react";
 import max from "../assets/maximize.svg";
 import { Link, useNavigate } from "react-router-dom";
-import { Cookies } from "react-cookie";
-import axios from "axios";
+import axios from "../../axios.config.js";
 
 function GroupCard({ theme, description, id, potential }) {
-  const url = "http://localhost:8000/api/groups/";
-  const cookies = new Cookies();
   const navigation = useNavigate();
 
   const handleJoin = async()=>{
-    const res = await axios.patch(url + id, {}, {headers:{
-      Authorization: "Bearer " + cookies.get('token')
-    }})
+    await axios.patch("/groups/" + id)
     navigation("/")
   }
 
   return (
     <div className="drop-shadow-lg md:h-24 w-full py-4 mt-5 rounded-xl bg-neutral-700 flex items-center justify-between max-w-[820px] mx-auto px-2 md:px-12">
-      <div className="flex items-center">
-        <div className="flex-col ml-5">
+      <div className="flex items-center w-[70%]">
+        <div className="flex-col ml-5 w-full">
           <h1 className="font-bold text-lg mb-1 md:text-3xl truncate">
             {theme}
           </h1>

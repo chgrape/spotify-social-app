@@ -1,12 +1,10 @@
 import { useRef, useState } from "react";
-import axios from "axios";
-import { Cookies } from "react-cookie";
-import { redirect, useLoaderData, useNavigate } from "react-router-dom";
+import axios from "../../axios.config.js";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import Dropdown from "../components/Dropdown";
 import DropdownChoice from "../components/DropdownChoice";
 
 function Create() {
-  const url = "http://localhost:8000/api/posts";
   const groups = useLoaderData();
   const navigate = useNavigate();
 
@@ -16,26 +14,19 @@ function Create() {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
 
-  const cookies = new Cookies();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(title == "" || desc == "" || group == "Choose Group"){
       return;
     }
 
-    const data = axios.post(
-      url,
+    await axios.post(
+      '/posts',
       {
         title: title,
         content: desc,
         group: group
       },
-      {
-        headers: {
-          Authorization: "Bearer " + cookies.get("token"),
-        },
-      }
     );
 
     navigate("/")

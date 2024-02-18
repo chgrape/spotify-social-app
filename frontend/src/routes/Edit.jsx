@@ -1,6 +1,5 @@
-import axios from "axios";
+import axios from "../../axios.config.js";
 import React, {  useRef, useState } from "react";
-import { Cookies } from "react-cookie";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import Dropdown from "../components/Dropdown";
 import DropdownChoice from "../components/DropdownChoice";
@@ -10,8 +9,6 @@ function Edit() {
   const postGroup = groups.find(group => group.id === post.group_id);
   const updatedGroups = groups.filter(group => group.id !== post.group_id)
 
-  const cookies = new Cookies();
-  const url = "http://localhost:8000/api/posts/" + post.id;
   const navigation = useNavigate();
 
   const formRef = useRef(null);
@@ -22,14 +19,10 @@ function Edit() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = axios.put(url, {
-      title:title,
-      content:desc,
+    await axios.put('/posts/' + post.id, {
+      title:title ? title : post.title,
+      content:desc ? desc : post.content,
       group:group
-    },{
-      headers:{
-        Authorization: "Bearer " + cookies.get('token')
-      }
     })
     navigation("/")
   }
