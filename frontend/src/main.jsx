@@ -91,7 +91,7 @@ const router = createBrowserRouter([
           const res = await axios.get("/groups/" + params.id).catch((e)=> {
             throw new Response("msg", {status: 500})
           });
-          return res.data.posts;
+          return res.data;
         }
       },
       {
