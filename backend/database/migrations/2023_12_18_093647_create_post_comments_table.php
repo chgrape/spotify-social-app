@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('post_id');
             $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
             $table->text('content');
-            $table->integer('like_count')->default(0);
             $table->timestamps();
         });
     }

@@ -7,6 +7,7 @@ use App\Jobs\UpdateUserInfoDaily;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class CheckUpdate extends Command
 {
@@ -26,22 +27,20 @@ class CheckUpdate extends Command
             $carb_timestamp = Carbon::parse($user->last_info_update);
 
             if($carb_timestamp->addDay() < now()){
-                $users_info[] = $user;
+                $users_info[] = $user->id;
             }
 
             $carb_timestamp = Carbon::parse($user->last_refresh);
 
-            if($carb_timestamp->addHour() < now()){
-                $users_refresh[] = $user;
-            }
+            $users_refresh[] = $user->id;
         }
-        
 
-        foreach($users as $user){
+
+        foreach($users_refresh as $user){
             RefreshToken::dispatch($user);
         }
 
-        foreach($users as $user){
+        foreach($users_info as $user){
             UpdateUserInfoDaily::dispatch($user);
         }
     }

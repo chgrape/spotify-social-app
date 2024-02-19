@@ -33,9 +33,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/posts/{id}', [PostController::class, 'update']);
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
 
+    Route::get('/post/{id}/comments', [PostCommentController::class, 'index']);
     Route::post('/post/{id}/comment', [PostCommentController::class, 'store']);
     Route::get('/post/{id}/comment/{offset}/{limit}', [PostCommentController::class, 'showMultiple']);
-    Route::get('/post/{id}/comments', [PostCommentController::class, 'index']);
+    Route::put('/post/{id}/comment/{comment_id}', [PostCommentController::class, 'update']);
+    Route::delete('/post/{id}/comment/{comment_id}', [PostCommentController::class, 'delete']);
 
     Route::post('/post/{id}/like', [PostController::class, 'like']);
 

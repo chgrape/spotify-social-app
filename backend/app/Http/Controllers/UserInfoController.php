@@ -8,6 +8,7 @@ use App\Models\Group;
 use App\Models\Playlist;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class UserInfoController extends Controller
 {
@@ -69,7 +70,14 @@ class UserInfoController extends Controller
 
     public function get_new_token($refresh_token)
     {
-        $response = Http::asForm()->withHeaders(['Authorization' => 'Basic ' . base64_encode(env('SPOTIFY_CLIENT_ID') . ":" . env('SPOTIFY_SECRET')),])->post('https://accounts.spotify.com/api/token', ['grant_type' => 'refresh_token', 'refresh_token' => $refresh_token]);
+        $client_id = config('spotify.client_id');
+        $client_secret = config('spotify.client_secret');
+        $b =  base64_encode($client_id . ":" . $client_secret);
+
+        $response = Http::asForm()
+        ->withHeaders(['Authorization' => 'Basic ' . $b,])
+        ->post('https://accounts.spotify.com/api/token', ['grant_type' => 'refresh_token', 'refresh_token' => $refresh_token]);
+        
         return $response->json()["access_token"];
     }
 
@@ -87,7 +95,7 @@ class UserInfoController extends Controller
             $group_objs[] = Group::where('theme', $artist["name"])->first()->id;
         }
 
-        foreach($genres as $genre){
+        foreach ($genres as $genre) {
             if (!Group::where('theme', $genre)->exists()) {
                 Group::create([
                     'theme' => ucwords($genre),
@@ -102,9 +110,9 @@ class UserInfoController extends Controller
     public function synthesize_playlist_data($user)
     {
 
-        
+
         $res = Http::withHeaders(['Authorization' => "Bearer " . $user->token])
-        ->get('https://api.spotify.com/v1/me/playlists');
+            ->get('https://api.spotify.com/v1/me/playlists');
 
 
         if (empty($res->json()["items"])) {
@@ -164,17 +172,18 @@ class UserInfoController extends Controller
         return $all_playlist_params;
     }
 
-    public function create_playlist_objs($playlists, $user_id){
-        if(empty($playlists)){
+    public function create_playlist_objs($playlists, $user_id)
+    {
+        if (empty($playlists)) {
             return;
         }
-        foreach( $playlists as $playlist ){
-            if(!Playlist::where('playlist_id', $playlist["playlist_id"])->exists()){
+        foreach ($playlists as $playlist) {
+            if (!Playlist::where('playlist_id', $playlist["playlist_id"])->exists()) {
                 $playlist = array_merge($playlist, ["user_id" => $user_id]);
                 Playlist::create([
                     ...$playlist
                 ]);
-            }else{
+            } else {
                 Playlist::where('playlist_id', $playlist["playlist_id"])->update([
                     ...$playlist
                 ]);

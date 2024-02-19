@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class RefreshToken implements ShouldQueue
 {
@@ -20,9 +21,9 @@ class RefreshToken implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(User $user)
+    public function __construct(int $id)
     {
-        $this->user = $user;
+        $this->user = User::find($id);
         $this->user_info_controller = new UserInfoController();
     }
 
@@ -32,7 +33,6 @@ class RefreshToken implements ShouldQueue
     public function handle(): void
     {   
         $token = $this->user_info_controller->get_new_token($this->user->refresh_token);
-        
         $this->user->update(['token' => $token, 'last_refresh' => now()]);
     }
 }

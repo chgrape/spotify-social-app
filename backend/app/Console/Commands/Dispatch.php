@@ -14,7 +14,7 @@ class Dispatch extends Command
      *
      * @var string
      */
-    protected $signature = 'dispatch {job}';
+    protected $signature = 'dispatch {job} {id}';
 
     /**
      * The console command description.
@@ -27,10 +27,11 @@ class Dispatch extends Command
      */
     public function handle()
     {
+        $id = $this->argument('id');
         $job = $this->argument('job');
         $jobClass = 'App\Jobs\\' . Str::studly($job);
 
-        dispatch(new $jobClass());
+        dispatch_sync(new $jobClass($id));
 
     }
 }

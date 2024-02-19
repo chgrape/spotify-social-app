@@ -20,10 +20,10 @@ class UpdateUserInfoDaily implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(User $user)
+    public function __construct(int $id)
     {
         $this->user_info_controller = new UserInfoController();
-        $this->user = $user;
+        $this->user = User::find($id);
     }
 
     /**
