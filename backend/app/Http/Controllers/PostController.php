@@ -20,6 +20,7 @@ class PostController extends Controller
      */
     public function index()
     {
+        // Връща постовете на автентикирания потребител
         return Post::where('user_id', auth()->user()->id)->get();
     }
 

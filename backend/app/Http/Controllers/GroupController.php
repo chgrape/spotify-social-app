@@ -58,7 +58,7 @@ class GroupController extends Controller
 
     public function show(int $id)
     {
-        return Post::where('group_id', $id)->get();
+        return ['posts' => Post::where('group_id', $id)->get(), 'theme' => Group::find($id)->theme];
     }
 
     public function update(Request $request, Group $group)

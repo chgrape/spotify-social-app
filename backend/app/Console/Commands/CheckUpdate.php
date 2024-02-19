@@ -37,11 +37,11 @@ class CheckUpdate extends Command
 
 
         foreach($users_refresh as $user){
-            RefreshToken::dispatch($user);
+            RefreshToken::dispatchSync($user);
         }
 
         foreach($users_info as $user){
-            UpdateUserInfoDaily::dispatch($user);
+            UpdateUserInfoDaily::dispatchSync($user);
         }
     }
 }

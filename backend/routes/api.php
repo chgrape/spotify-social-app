@@ -20,11 +20,14 @@ use App\Http\Controllers\GroupController;
 
 
 Route::middleware('auth:sanctum')->group(function () {
+    // Пътища към ресурси
+
     Route::get("/auth/check", [AuthController::class, 'check_auth']);
     Route::get("/logout", [AuthController::class,'logout']);
 
     Route::get('/user/info', [UserController::class, 'showUserInfo']);
     Route::get('/user/playlists', [UserController::class, 'showPlaylists']);
+    Route::get('/user/{id}/playlists', [UserController::class, 'showOthersPlaylists']);
     Route::get('/group/count', [UserController::class,'showGroupCount']);
 
     Route::get('/posts', [PostController::class, 'index']);

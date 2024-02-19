@@ -76,6 +76,11 @@ class UserController extends Controller
         return Playlist::where("user_id", auth()->user()->id)->get();
     }
 
+    public function showOthersPlaylists(int $id)
+    {
+        return ['playlists' => Playlist::where("user_id", $id)->get(), 'username' => User::find($id)->name];
+    }
+
     public function showGroupCount(){
         return count(auth()->user()->groups);
     }

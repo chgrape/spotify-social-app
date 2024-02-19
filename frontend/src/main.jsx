@@ -79,7 +79,8 @@ const router = createBrowserRouter([
           const res = await axios.get("/posts/" + params.id).catch((e)=> {
             throw new Response("msg", {status: 500})
           });
-          return res.data;
+          const group = await axios.get("/groups/" + res.data.group_id)
+          return {post: res.data, group: group.data};
         }
       },
       {
@@ -90,7 +91,7 @@ const router = createBrowserRouter([
           const res = await axios.get("/groups/" + params.id).catch((e)=> {
             throw new Response("msg", {status: 500})
           });
-          return res.data;
+          return res.data.posts;
         }
       },
       {
@@ -99,6 +100,15 @@ const router = createBrowserRouter([
         loader: async () => {
           await requireAuth();
           const res = await axios.get("/user/playlists");
+          return res.data;
+        }
+      },
+      {
+        path: "/user/:id/playlists",
+        element: <Playlists />,
+        loader: async ({params}) => {
+          await requireAuth();
+          const res = await axios.get("/user/" + params.id + "/playlists/");
           return res.data;
         }
       },

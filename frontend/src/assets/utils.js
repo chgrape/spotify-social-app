@@ -10,6 +10,7 @@ export async function requireAuth(){
             Authorization: "Bearer " + cookies.get('token')
         }
     }).catch((e) =>{
+        localStorage.clear()
         throw redirect("/login")
     })
 }

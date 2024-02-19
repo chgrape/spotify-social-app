@@ -12,7 +12,7 @@ import del from "../assets/trash.svg"
 function Post() {
   const [content, setContent] = useState("");
   const [offset, setOffset] = useState(1);
-  const post = useLoaderData();
+  const {post, group} = useLoaderData();
   const user = localStorage.getItem('username');
   const [commentCount, setCommentCount] = useState(post.comment_cnt);
   const [likes, setLikes] = useState(post.like_count);
@@ -60,8 +60,9 @@ function Post() {
       <div className="bg-neutral-700 rounded-lg p-2">
         <div className="w-full bg-neutral-700 rounded-t-lg p-3 flex flex-col justify-between">
           <div>
-            <div className="flex flex-row items-center mb-5">
-              <h1 className="mr-12">{post.title}</h1>
+            <div className="flex flex-col-reverse md:flex-row items-center mb-5">
+              <h1 className="mr-12 truncate max-w-[calc(100%-48px)]">{post.title}</h1>
+              <div className="flex flex-row items-center max-md:mb-4">
               {post.avatar ? (
                 <img
                   className="mr-2 h-6 w-6 rounded-full"
@@ -71,9 +72,15 @@ function Post() {
               ) : (
                 <div className="h-6 w-6 bg-neutral-400 mr-2 rounded-full" />
               )}
+              
               <h1 className="text-neutral-400 text-sm">{post.name}</h1>
+              <h1 className="text-neutral-400 text-sm mx-2">•</h1>
+              <Link to={`/group/${post.group_id}`}>
+              <h1 className="text-neutral-400 text-sm hover:text-neutral-300">Group: {group.theme}</h1>
+              </Link>
+              </div>
             </div>
-            <p className="w-full break-all">{post.content}</p>
+            <p className="w-full break-all mb-12">{post.content}</p>
           </div>
           <div className="flex flex-row justify-end items-center">
             {user == post.name && <Link to={"/post/" + post.id + "/edit"}><img src={edit} className="h-5 w-5 ml-2 cursor-pointer opacity-80" /></Link>}
@@ -109,6 +116,7 @@ function Post() {
                 content={comment.content}
                 user={comment.name}
                 avatar={comment.avatar}
+                user_id={comment.user_id}
               />
             ))
           ) : (

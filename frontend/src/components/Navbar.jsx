@@ -34,10 +34,6 @@ function Navbar() {
               className="mx-5 transition-opacity duration-150 ease-in-out hover:opacity-100 opacity-70 h-6 w-6"
             />
           </Link>
-          <img
-            src={about}
-            className="mx-5 transition-opacity duration-150 ease-in-out hover:opacity-100 opacity-70 h-6 w-6"
-          />
           {user && <ProfilePill user={user} avatar={avatar} />}
         </div>
       </nav>

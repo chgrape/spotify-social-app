@@ -1,10 +1,11 @@
 import React from 'react'
 
-function Avatar({av, height, width}) {
+function Avatar({av, height, width, sx}) {
+  const missing = av == "null" || !av
 
   return (
     <>
-    {av !== "null" || !av ? <img className={`mr-2 h-${height} min-w-${width} rounded-full`} src={av} /> : <div className={`mr-2 h-${height} min-w-${width} rounded-full bg-neutral-400`}></div>}
+    { !missing ? <img className={`mr-2 h-${height} min-w-${width} rounded-full ${sx}`} src={av} /> : <div className={`mr-2 h-${height} w-${width} rounded-full bg-neutral-400 ${sx}`}></div>}
     </>
   )
 }
