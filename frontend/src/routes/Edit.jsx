@@ -17,8 +17,13 @@ function Edit() {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
 
+  const isWhitespaceString = str => !str.replace(/\s/g, '').length
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(isWhitespaceString(title) || isWhitespaceString(desc)){
+      return;
+    }
     await axios.put('/posts/' + post.id, {
       title:title ? title : post.title,
       content:desc ? desc : post.content,
@@ -28,8 +33,8 @@ function Edit() {
   }
   
   return (
-    <div className="max-w-[820px] flex flex-col mx-auto pt-32 px-2">
-      <h1 className="pb-4 border-b border-neutral-400">Edit post</h1>
+    <div className="max-w-[820px] flex flex-col mx-auto pt-32 px-5">
+      <h1 className="pb-4 border-b border-neutral-400 text-2xl">Edit post</h1>
       <section className="my-5">
       {updatedGroups ? (
           <Dropdown name={group}>

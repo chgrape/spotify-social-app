@@ -13,10 +13,12 @@ function Create() {
 
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
+  
+  const isWhitespaceString = str => !str.replace(/\s/g, '').length
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(title == "" || desc == "" || group == "Choose Group"){
+    if(isWhitespaceString(title) || isWhitespaceString(desc) || group == "Choose Group"){
       return;
     }
 

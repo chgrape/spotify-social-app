@@ -73,7 +73,8 @@ class UserController extends Controller
 
     public function showPlaylists()
     {
-        return Playlist::where("user_id", auth()->user()->id)->get();
+        
+        return ['playlists' => Playlist::where("user_id", auth()->user()->id)->get(), 'username' => auth()->user()->name];
     }
 
     public function showOthersPlaylists(int $id)

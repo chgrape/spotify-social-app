@@ -22,7 +22,7 @@ function Playlists() {
               />
             );
           })
-        ) : username ? <h1>This user either doesn't have any playlists or they're private</h1> : <h1>You don't have any playlists or they're all private</h1>
+        ) : <h1>This user either doesn't have any playlists or they're private</h1>
         }
       </div>
     </div>

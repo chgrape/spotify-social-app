@@ -11,6 +11,7 @@ export async function requireAuth(){
         }
     }).catch((e) =>{
         localStorage.clear()
+        window.dispatchEvent(new Event('storage'))
         throw redirect("/login")
     })
 }
